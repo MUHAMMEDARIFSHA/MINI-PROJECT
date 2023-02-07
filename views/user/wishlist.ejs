@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('../partials/head')%>
+<body>
+    <%-include('../partials/user/user-navbar') %>
+    <h4>WISHLIST</h4>
+
+
+  
+   <div class="container">
+    <div class="row">
+        <% if(wishlist.length>0){ %>
+            <% wishlist.forEach(items=>{ %>
+        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+            <!-- Card-->
+            <div class="card shadow-sm border-0 rounded">
+              <div class="card-body p-0"><img src="<%=items.productId.images[0] %>" alt="" class="w-100 card-img-top">
+                <div class="p-4">
+                  <h5 class="mb-0"><%=items.productId.productname %></h5>
+                  <p class="small text-muted mt-2 fw-bold fs-6"><%=items.productId.price %></p>
+                  <div>
+                    <button class="btn boder-0 btn-warning">
+                        ADD TO CART
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%  }) %>
+    <% } %>
+        </div>
+    </div>
+    
+   </div>
+    <%-include('../partials/bottom-navbar') %>
+</body>
+</html>

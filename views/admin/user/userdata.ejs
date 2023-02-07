@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('../../partials/head') %>
+<body>
+ <%-include('../../partials/admin/dash-navbar') %>
+ <h2 class="">USERDATA</h2>
+ <!-- <form class="d-flex col-4 "  role="search">
+    <input class="form-control " type="search" placeholder="Search" aria-label="Search">
+    <button class="btn  " type="submit"><iconify-icon class="fs-3" icon="ic:round-search"></iconify-icon></button>
+  </form> -->
+ <section class="container pt-5">
+    <div class="row ">
+      <div class="col-12 table-responsive ">
+        <table id="datatable" class="table display table-overflow  table-borderless table-hover">
+          <thead>
+            <tr class="pl-3">
+              <th class="" scope="col">SL.NO</th>
+              <th class="" scope="col">Name</th>
+              <th class="" scope="col">Email</th>
+              <th class="" scope="col">Phone</th>
+              <th class="" scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="ml-0">
+            <% if(register.length>0){ %>
+              <% var count=1 %>
+                <% register.forEach(item=> { %>
+                  <tr>
+                    <th class="" scope="row">
+                      <%= count++ %>
+                    </th>
+                    <td class="">
+                      <%= item.username  %>
+                    </td>
+                    <td class="">
+                      <%= item.email %>
+                    </td>
+                    <td class="">
+                      <%= item.number %>
+                    </td>
+                    <td class="">
+                      <div>
+                         
+
+                           <% if(item.isBlocked){ %>
+                          <button class="btn border-0 btn-outline-success" id="button<%= count %> "
+                            onclick="blockUser(this.id)" data-url="<%= item._id %>">Unblock</button>
+                          <% }else{ %>
+                            <button class="btn border-0 btn-outline-danger fw-bold" id="button<%= count %>"
+                              onclick="blockUser(this.id)" data-url="<%= item._id %>">Block</button>
+                            <% } %>
+                      </div>
+                    </td>
+                  </tr>
+                  <% }) %>
+                    <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+    
+    <%-include ('../../partials/bottom-navbar') %>
+    <script src="/script/scriptadmin.js"></script>
+</body>
+</html>

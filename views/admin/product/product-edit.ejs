@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include ('../../partials/head')  %> 
+<body>
+    <%-include('../../partials/admin/dash-navbar')  %> 
+    <h3>EDIT PRODUCT</h3>
+    
+    <section class="container ">
+      
+        <div  class="row">
+            <div class="col-12">
+             
+
+       <form action="/admin/products/editproducts/<%=products.id %>" method="post" enctype="multipart/form-data" >
+       
+            <div class="mb-2">
+                <label for="productname" class="form-label fw-bold fs-5">Product Name</label>
+                <input type="text" class="form-control border-2 border-secondary" value="<%= products.productname %>" id="productname" name="productname" placeholder="">
+              </div>
+              <div class="mb-2">
+                <label for="color" class="form-label fw-bold fs-5 ">Colour</label>
+                <input type="text" class="form-control w-50 border-2 border-secondary" value="<%= products.color %>" id="color" name="color" placeholder="">
+              </div>
+              
+              <div class="col-md-4">
+                <label for="size" class="form-label fw-bold fs-5">SIZE</label>
+                <select id="size" name="size" class="form-select fw-bold border-2 border-secondary">
+                  <option  class="fw-bold"><%= products.size %></option>
+                  <option  class="fw-bold">S</option>
+                      <option class="fw-bold">M</option>
+                      <option  class="fw-bold">L</option>
+                      <option  class="fw-bold">XL</option>
+                </select>
+              </div> 
+               <div class="col-md-4">
+                <label for="category" class="form-label fw-bold fs-5">Category</label>
+                <select id="category" name="categoryId" class="form-select fw-bold border-2 border-secondary"> 
+                  <!-- <option selected>Choose...</option> -->
+                  <% if(category.length>0){ %> 
+                    <% category.forEach(item => { %> 
+                      <option value="<%= item._id %>" <%= item._id.toString() == products.categoryId.toString() ? "selected" : '' %>  ><%= item.categoryname %> </option>
+                    <% }) %> 
+                  <% } %> 
+                </select>
+              </div> 
+        <div class="mb-2">
+            <label for="totalStoke" class="form-label fw-bold fs-5 ">Total Stoke</label>
+            <input type="number" class="form-control w-50 border-2 border-secondary" value="<%= products.totalStoke %>" id="totalStoke" name="totalStoke" placeholder="">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold fs-5" for="price">Price</label>
+            <input type="number" value="<%= products.price %>" name="price" id="price" class="form-control border-2 border-secondary w-50" value="">
+          </div>
+              <div class="mb-2">
+                <label for="description" class="form-label fw-bold fs-5">Description</label>
+                <textarea class="form-control border-2 border-secondary"  id="description" name="description" rows="3"><%= products.description %></textarea>
+              </div> 
+              <div>
+                <img class="image m-3" src="/<%= products.images[0] %>" alt="">
+                <img class="image m-3" src="/<%= products.images[1] %>" alt="">
+                <img class="image m-3" src="/<%= products.images[2] %>" alt="">
+              </div>
+              <div class="mb-2"> 
+                <label for="image" class="form-label fw-bold fs-5">Images</label>
+                <input class="form-control border-2 border-secondary" type="file" id="image" name="image" >
+                <input class="form-control border-2 border-secondary" type="file" id="image2" name="image2" >
+                <input class="form-control border-2 border-secondary" type="file" id="image3" name="image3" >
+              </div>
+    
+              <div class=" ">
+                <button class="btn btn-outline-secondary btn-lg mt-3 mb-3 " type="submit"> EDIT PRODUCT</button>
+              </div>
+             
+         </form>
+        
+         </div>
+         </div> 
+          
+    </section>
+  
+    <%-include ('../../partials/bottom-navbar')  %> 
+</body>
+</html>

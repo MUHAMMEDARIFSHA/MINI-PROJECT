@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include ('./partials/head') %>
+<body>
+  <%-include ('./partials/user/user-navbar') %>
+
+
+
+  <div class="container">
+      <h2
+       class="mt-3">ALL PRODUCTS</h1>
+      <br>
+      
+      <div class="row">
+        <% if(products.length >0){ %>
+             <% products.forEach(item=>{  %>
+     
+       <div class="col-md-3">
+         <a href="/product/details/<%=item._id %>">
+         <div class="dress-card">
+         <div class="dress-card-head">
+            <img class="dress-card-img-top" src="/<%= item.images[0] %>"alt="">
+                  <div class=" surprise-bubble"><span class="dress-card-heart">
+              <i class="fas fa-heart"></i>
+            </span><a href="#"> <span>More</span></a>
+          </div>
+        </div>
+        <div class="dress-card-body">
+          <h4 class="dress-card-title"><%= item.productname %></h4>
+          <p class="dress-card-para"></p>
+          <p class="dress-card-para"><span class="dress-card-price fs-5"> ₹ <%=item.price %>&ensp;</span><span
+              class="dress-card-crossed"></span><span class="dress-card-off text-primary">&ensp;(60% OFF)</span></p>
+          <div class="row">
+            <div class="col-md-6 card-button"><a href="">
+                <div class="card-button-inner bag-button">Add to Cart</div>
+              </a></div>
+            <div class="col-md-6 card-button"><a href="">
+                <div class="card-button-inner wish-button">Whishlist</div>
+              </a></div>
+          </div>
+        </div>
+      </div>
+     </a>
+    </div>
+     
+   <%   }) %>
+     <%  }  %>
+   </div>
+    </div>
+
+        
+
+      <nav class="bottom-land navbar   ">
+            <div class="container">
+              <div class="row">
+                <div class=" col-md-12 logo d-flex align-items-center my-2">
+                        <h6 class="brand text-dark">PitBULL</h6>
+                     </div>
+                <div class="col-md-3 ">
+                  <h6 class="border-bottom border-2 border-dark">COMPANY</h6>
+                  <a class=" ab my-2 " href="#">About Us</a><br>
+                  <a class=" ab my-2" href="#">Contact Us</a><br>
+                  <a class=" ab my-2" href="#">Product Warranty</a><br>
+                </div>
+                <div class="col-md-3">
+                  <h6 class="border-bottom border-2 border-dark">CONNECT WITH US</h6>
+                  <a  class="ab my-1" href="#">Instagram</a><br>
+                  <a class="ab my-2"href="https://www.facebook.com/">Facebook</a><br>
+                  <a class="ab my-2" href="#">Twitter</a><br>
+                </div>
+                <div class="col-md-3">
+                  <h6 class="border-bottom border-2 border-dark">EMAIL US</h6><br>
+                  <a class="ab my-2" href="#">pitbull@gmail.com</a>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="border-bottom border-2 border-dark">POLICY</h6>
+                    <a  class="ab my-1" href="#">Terms</a><br>
+                    <a class="ab my-2"href="#">Return policies</a><br>
+                  </div>
+                 
+              </div>
+            </div>
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold my-2 mx-3" href="#">Copyright<iconify-icon class="fs-5" icon="mingcute:copyright-fill"></iconify-icon>2002</a>
+        </div>
+      </nav>
+    
+    
+</body>
+</html>
