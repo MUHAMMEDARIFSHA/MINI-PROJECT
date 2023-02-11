@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <%-include('../partials/head')%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
     <%-include('../partials/user/user-navbar') %>
-    <h4>WISHLIST</h4>
+    
 
 
   
@@ -19,8 +20,12 @@
                   <h5 class="mb-0"><%=items.productId.productname %></h5>
                   <p class="small text-muted mt-2 fw-bold fs-6"><%=items.productId.price %></p>
                   <div>
-                    <button class="btn boder-0 btn-warning">
+                    <button class="btn boder-0 btn-warning fw-bold "onclick= "addtoCartfromWish('<%= items.productId.id %>')">
                         ADD TO CART
+                    </button>
+                    <button type="button" class="btn btn-danger ms-5" onclick="removeWishItem('<%=items.productId.id %>')" data-mdb-toggle="tooltip"title="Remove item">
+                      
+                      <i class="fa fa-trash"></i>
                     </button>
                   </div>
                 </div>
@@ -28,11 +33,22 @@
             </div>
           </div>
           <%  }) %>
-    <% } %>
+    <% } else{ %>
+      <div class="d-flex justify-content-center mb-5">
+        <h4 class="" style="font-family:cursive;"></h4>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+      <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_qipaj41e.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop  autoplay></lottie-player>
+      </div>
+      
+      
+      <%   } %>
         </div>
     </div>
     
    </div>
     <%-include('../partials/bottom-navbar') %>
+    <script src="/script/scriptadmin.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </body>
 </html>

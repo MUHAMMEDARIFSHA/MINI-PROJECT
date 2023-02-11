@@ -33,7 +33,7 @@
                           <%=count++ %>
                         </th>
                         <td class="fs-6 fw-bold">
-                          <%=orders.customerId.username %>
+                          <%= orders.customerId?.username %>
                         </td>
                         <td class="fs-6 fw-bold">
                           <% orders.items.forEach(item=>{ %>
@@ -121,7 +121,7 @@
                                   aria-label="Close"></button>
                               </div>
                               <div class="modal-body fw-bold">
-                                User Name : <%=orders.customerId.username %>
+                                User Name : <%=orders.customerId?.username %>
                               </div>
 
 

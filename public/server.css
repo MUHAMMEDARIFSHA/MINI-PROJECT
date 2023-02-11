@@ -336,26 +336,7 @@ background-color:#2A6486  !important;
    }
 
 
-   /* image zoom */
-
-   .img-cont {
-    position: relative;
-  }
-  
-  .img-cont-lens {
-    position: absolute;
-    border: 1px solid #d4d4d4;
-    /*set the size of the lens:*/
-    width: 40px;
-    height: 50px;
-  }
-  
-  .img-zoom-result {
-    border: 1px solid #d4d4d4;
-    /*set the size of the result div:*/
-    width: 275px;
-    height: 300px;
-  }
+   
 
 
 

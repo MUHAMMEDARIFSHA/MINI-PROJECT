@@ -75,7 +75,7 @@ function addtoCart(id){
     const body ={
         id
     }
-    console.log(id)
+
     fetch(url,{
         method:'PATCH',
         headers :{
@@ -95,6 +95,28 @@ function addtoCart(id){
 
 function removeCartItem(id){
     const url = "http://localhost:4000/cart/remove";
+    const body ={
+        id
+    }
+    console.log(id)
+    fetch(url,{
+        method:'PATCH',
+        headers :{
+            'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify(body)
+    }).then((response)=> response.json())
+    .then((response)=>{
+        if(response.successStatus){
+            window.location.reload()
+        }
+        else{
+            document.querySelector('#error').innerHTML = "An error occured please try again"
+        }
+    }).catch((err) => console.log(err))
+}
+function removeWishItem(id){
+    const url = "http://localhost:4000/wish/remove";
     const body ={
         id
     }
@@ -237,3 +259,80 @@ function addtoWishlist(id){
         }
     }).catch((err) => console.log(err))
 }
+
+function addtoCartfromWish(id){
+    const url = "http://localhost:4000/wishlist/cart/add";
+    const body ={
+        id
+    }
+
+    fetch(url,{
+        method:'PATCH',
+        headers :{
+            'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify(body)
+    }).then((response)=> response.json())
+    .then((response)=>{
+        if(response.successStatus){
+            window.location.reload()
+        }
+        else{
+            document.querySelector('#error').innerHTML = "An error occured please try again"
+        }
+    }).catch((err) => console.log(err))
+}
+
+function deleteCoupon(id){
+    const data = document.getElementById(id).dataset.url;
+    const url = "http://localhost:4000/admin/coupons/" +data;
+    const body ={
+        id:data
+    }
+    fetch(url,{
+        method:'PATCH',
+        headers :{
+            'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify({body})
+    }).then((response)=> response.json())
+    .then((response)=>{
+        if(response.successStatus){
+            console.log("sucess");
+            window.location.reload()
+        }
+        else{
+            document.querySelector('#error').innerHTML = "An error occured please try again"
+        }
+    }).catch((err) => console.log(err))
+}
+
+
+    function addCoupons(buttonid){
+        const button = document.getElementById(buttonid)
+        const coupon = document.getElementById('coupon').value
+        const url = "checkout/addcoupon" 
+        console.log(coupon);
+        console.log("addcoupon");
+        const body ={
+            coupon
+        }
+        fetch(url,{
+            method:'POST',
+            headers :{
+                'Content-Type' : 'application/json'
+            },
+            body:JSON.stringify(body)
+        }).then((response)=> response.json())
+        .then((response)=>{
+            if(response.successStatus){
+                console.log("sucess");
+                window.location.reload()
+            }
+            else{
+               error.innerHTML = response.message; 
+            }
+        })
+        .catch((err) => console.log(err))           
+        
+    }

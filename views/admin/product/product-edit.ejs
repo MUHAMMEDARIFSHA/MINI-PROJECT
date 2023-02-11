@@ -15,11 +15,11 @@
        
             <div class="mb-2">
                 <label for="productname" class="form-label fw-bold fs-5">Product Name</label>
-                <input type="text" class="form-control border-2 border-secondary" value="<%= products.productname %>" id="productname" name="productname" placeholder="">
+                <input type="text" class="form-control border-2 border-secondary" value="<%= products.productname %>" id="productname" name="productname" placeholder="" required>
               </div>
               <div class="mb-2">
                 <label for="color" class="form-label fw-bold fs-5 ">Colour</label>
-                <input type="text" class="form-control w-50 border-2 border-secondary" value="<%= products.color %>" id="color" name="color" placeholder="">
+                <input type="text" class="form-control w-50 border-2 border-secondary" value="<%= products.color %>" id="color" name="color" placeholder="" required>
               </div>
               
               <div class="col-md-4">
@@ -45,15 +45,15 @@
               </div> 
         <div class="mb-2">
             <label for="totalStoke" class="form-label fw-bold fs-5 ">Total Stoke</label>
-            <input type="number" class="form-control w-50 border-2 border-secondary" value="<%= products.totalStoke %>" id="totalStoke" name="totalStoke" placeholder="">
+            <input type="number" class="form-control w-50 border-2 border-secondary" value="<%= products.totalStoke %>" id="totalStoke" name="totalStoke" placeholder="" required>
           </div>
           <div class="col-md-4">
             <label class="form-label fw-bold fs-5" for="price">Price</label>
-            <input type="number" value="<%= products.price %>" name="price" id="price" class="form-control border-2 border-secondary w-50" value="">
+            <input type="number" value="<%= products.price %>" name="price" id="price" class="form-control border-2 border-secondary w-50" value="" required>
           </div>
               <div class="mb-2">
                 <label for="description" class="form-label fw-bold fs-5">Description</label>
-                <textarea class="form-control border-2 border-secondary"  id="description" name="description" rows="3"><%= products.description %></textarea>
+                <textarea class="form-control border-2 border-secondary"  id="description" name="description" rows="3" required><%= products.description %></textarea>
               </div> 
               <div>
                 <img class="image m-3" src="/<%= products.images[0] %>" alt="">

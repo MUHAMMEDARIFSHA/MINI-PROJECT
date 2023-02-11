@@ -19,6 +19,7 @@ router.get('/users',session.isLogged, adminControls.getUsers)
 router.put('/userdata/:id', adminControls.blockUser)
 
 router.patch('/categories/:id',session.isLogged, adminControls.deleteCategory )
+router.patch('/coupons/:id',session.isLogged,adminControls.deleteCoupon)
 
 router.patch('/orders/cancel',session.isLogged,adminControls.cancelOrder)
 
@@ -40,9 +41,13 @@ router.get('/logout',adminControls.getAdminlogout)
 
 router.get('/dashhome',session.isLogged, adminControls.getAdminhome)
 
+router.get('/coupon',session.isLogged,adminControls.getCoupon)
+
 router.post('/adminlogin',adminControls.redirectAdminhome)
 
 router.post('/categories/add',adminControls.addCategory)
+
+router.post('/coupon/add',adminControls.addCoupon)
 
 router.post('/products/addproducts',upload.fields([{ name:'image',maxCount:1}, {name:'image2',maxCount:1},{name:'image3',maxCount:1}]), adminControls.addProducts)
 

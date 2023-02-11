@@ -24,7 +24,7 @@ router.get('/payment/cod',session.isLogged,userControls.getOrdersucces)
 router.get('/orders',session.isLogged,userControls.getOrder)
 router.get('/address/edit',session.isLogged,userControls.getAddressadd)
 router.get('/wishlist',session.isLogged,userControls.getWishlist)
-
+router.get('/paymentfail',session.isLogged,userControls.getPaymentfail)
 
 router.post('/register',userControls.saveUser)
 router.post('/otp',userControls.addUser)
@@ -32,12 +32,21 @@ router.post('/login',userControls.redirectHomepage)
 router.post('/edituser/:id',userControls.editUser)
 router.post('/payment/cod',userControls.placeorderCod)
 router.post('/add/address/:id',userControls.addAddress)
+router.post('/payment/razorpay',userControls.placeorderRazorpay)
+router.post('/checkout/addcoupon',userControls.addCoupon)
+
+router.post('/payment/verify',session.isLogged,userControls.paymentVerify)
+router.post('/payment/cancel',session.isLogged.apply,userControls.paymentCancel)
+router.post('/payment/fail',session.isLogged,userControls.paymentFail)
 
 router.patch('/cart/add',userControls.addtoCart)
 router.patch('/cart/remove',userControls.removeCartItem)
 router.patch('/cart/change',userControls.changeQuantity)
 router.patch('/orders/cancel',userControls.orderCancel)
 router.patch('/wishlist/add',userControls.addtoWishlist)
+router.patch('/wish/remove',userControls.removeWishItem)
+router.patch('/wishlist/cart/add',userControls.addtoCartfromWish)
+
 
 
 

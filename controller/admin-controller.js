@@ -5,6 +5,7 @@ const Products = require('../models/products')
 const User = require('../models/user')
 const {upload} = require('../db/multer')
 const Orders = require('../models/order')
+const Coupons = require('../models/coupon')
 module.exports = {
     getAdminlogin: (req, res) => {
         if (req.session.message) {
@@ -154,6 +155,7 @@ module.exports = {
         const orders = await Orders.find().sort({createdAt:-1})
         .populate('customerId')
         .populate('items.productId')
+        console.log(orders)
         return res.render('admin/order',{orders})
     },
 
@@ -321,6 +323,66 @@ module.exports = {
 
         })
 
+    },
+    getCoupon :async(req,res)=>{
+        if(req.session.message){
+            const message = req.session.message
+            req.session.message =''
+  const coupons = await Coupons.find({isDeleted:false})
+  return res.render('admin/coupons',{message,coupons})
+        }
+        else{
+            const message = ''
+            const coupons = await Coupons.find({isDeleted:false})
+            return res.render('admin/coupons',{message,coupons})
+        }
+       
+    },
+    addCoupon: async(req,res)=>{
+        try{
+        const exist =  await Coupons.find({coupon : req.body.coupon})
+      if(exist.length>0){
+        req.session.message="Coupon already exist"
+        return res.redirect('/admin/coupon')
+      }
+      
+    
+        const expiry = new Date(req.body.expiry) 
+        const coupon = new Coupons({
+            coupon : req.body.coupon,
+            details : req.body.details,
+            expiry : expiry,
+            discount : req.body.discount
+
+     })
+     if(req.body.percentage){
+        coupon.isPercentage = true
+
+     }
+      await coupon.save()
+        return res.redirect('/admin/coupon')
+    }
+    catch(err){
+        console.log(err);
+    }
+       
+    },
+    deleteCoupon: async(req,res)=>{
+        try {
+            const id = req.params.id
+            await Coupons.findOneAndUpdate({ _id: id }, {
+                $set: {
+                    isDeleted: true
+                }
+            })
+            return res.json({
+                successStatus: true,
+            
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
 }

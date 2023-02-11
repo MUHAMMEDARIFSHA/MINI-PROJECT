@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('../partials/head')%>
+ <body>
+    <%-include('../partials/admin/dash-navbar') %>   
+<h4>coupons</h4>
+
+<div class="container">
+    <div class="row">
+        <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">Sl.No</th>
+                <th scope="col">Code</th>
+                <th scope="col">Details</th>
+                <th scope="col">Expiry </th>
+                <th scope="col">Discount</th>
+                <th scope="col">Percentage</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <% let count =1 %>
+            <% if(coupons.length>0){ %>
+              <% coupons.forEach(items=>{ %>
+
+             
+            <tbody>
+              <tr>
+                <th scope="row"><%=count++ %></th>
+                <td><%= items.coupon %></td>
+                <td><%=items.details %></td>
+                <td><%=items.expiry.toLocaleString() %></td>
+                <td><%=items.discount %></td>
+                <td><%=items.isPercentage %></td>
+                <td><button class="btn btn-outline-warning fw-bold" data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop<%= count %>">Delete</button>
+
+                
+                
+                
+                  <div class="modal fade" id="staticBackdrop<%= count %>" data-bs-backdrop="static"
+                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Coupon</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          It will be removed !!!
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                          <button type="button" class="btn btn-danger" id="delete<%= count %>"
+                            onclick="deleteCoupon(this.id)" data-url="<%= items._id %>">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+              <%  } else{ %>
+              <tr>
+                <td>NO COUPON AVAILABLE</td>
+              </tr>
+
+                <%    } %>
+            </tbody>
+           
+        
+          </table>
+</div>
+</div>
+
+<div class="container mt-5">
+    <form action="/admin/coupon/add" method="POST">
+      <h4 class="form-label">ADD NEW COUPON</h4>
+      <span class="text-danger fw-bold">
+    <%=message %>
+      </span>
+      <div class=" col-12 mt-3 ">
+        <input class="form-control form-control-lg mb-2  " type="text" name="coupon" id="coupon"
+          placeholder="New Coupon"></input>
+          <input class="form-control form-control-lg mb-2 " type="text" name="details" id="details"
+          placeholder="Discription"></input>
+          <input class="form-control form-control-lg mb-2 " type="text" name="expiry" id="expiry"
+          placeholder="Expiry Date"></input>
+          <!-- <input class="form-control form-control-lg mt-5  " type="text" name="discount" id="discount"
+          placeholder="Discount Amount "></input>
+          <h5>OR</h5> -->
+          <input class="form-control form-control-lg mb-2 w " type="text" name="discount" id="discount"
+          placeholder="Discount"></input>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="percentage" name="percentage" id="percentage">
+            <label class="form-check-label" for="flexCheckDefault">
+              Discount in percentage
+            </label>
+          </div>
+        <button class="btn btn-outline-secondary btn-lg mt-3 mb-3 fw-bold " type="submit"> ADD COUPON</button>
+      </div>
+    </form>
+
+  </div>
+
+
+
+    <%-include('../partials/bottom-navbar') %>
+    <script src="/script/scriptadmin.js"></script>
+</body>
+</html>
