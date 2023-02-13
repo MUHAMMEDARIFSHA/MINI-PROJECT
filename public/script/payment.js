@@ -1,6 +1,7 @@
 
 
- 
+//  Razorpay
+
   async function Payment(buttonid){
     const button = document.getElementById(buttonid)
     const address = document.querySelector('input[name = "address"]:checked').value
@@ -128,11 +129,71 @@
 
 
 
-      // alert(response.error.code);
-          // alert(response.error.description);
-          // alert(response.error.source);
-          // alert(response.error.step);
-          // alert(response.error.reason);
-          // alert(response.error.metadata.order_id);
-          // alert(response.error.metadata.payment_id);
+    
+
+
+          // Paypal  payment method
+
+
+
+
+
+          // async function paymentPaypal(buttonid){
+          //   console.log("paypal");
+          //   const button = document.getElementById(buttonid)
+          //   const address = document.querySelector('input[name = "address"]:checked').value
+          //   const url = "payment/paypal"
+          //   button.disabled = true
+          //   try {
+          //       const response = await fetch(url, {
+          //         method: 'POST',
+          //         headers: {
+          //           'Content-Type': 'application/json'
+          //         },
+          //         body: JSON.stringify({
+          //           address
+          //         })
+          //       })
+          //       const res = await response.json()
+          //       if(res.successStatus){
+          //         console.log("sucess");
+          //         onApprove(id)
+          //       }else{
+          //         window.location.href = '/checkout'
+          //       }
+          //     } catch (err) {
+          //           }
+            
+          //   }
+
+          //  function onApprove (data, action) {
+          //     return actions.order.capture().then(function(orderData) {
+          //       // Successful capture! For dev/demo purposes:
+          //       console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+          //       const transaction = orderData.purchase_units[0].payments.captures[0];
+          //       alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+          //           // When ready to go live, remove the alert and show a success message within this page. For example:
+          //       // const element = document.getElementById('paypal-button-container');
+          //       // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+          //       // Or go to another URL:  actions.redirect('thank_you.html');
+          //     });
+          //   }
+         
+
+
+
+
+          // 
+          //   // Sets up the transaction when a payment button is clicked
+          //   createOrder: (data, actions) => {
+          //     return actions.order.create({
+          //       purchase_units: [{
+          //         amount: {
+          //           value: '77.44' // Can also reference a variable or function
+          //         }
+          //       }]
+          //     });
+          //   },
+
+
     

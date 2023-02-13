@@ -9,6 +9,9 @@ const Payments =  require('../models/payment')
 const crypto = require('crypto')
 const { log } = require('util')
 const Coupons = require('../models/coupon')
+const paypal = require('@paypal/checkout-server-sdk')
+const Environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID,process.env.PAYPAL_CLIENT_SECRET)
+const paypalClient = new paypal.core.PayPalHttpClient(Environment)
 
 module.exports = {
 
@@ -368,7 +371,7 @@ module.exports = {
             const message = req.session.message
             discount = req.session.addeddiscount
             console.log(discount)
-            req.session.addeddiscount= 0
+            req.session.addeddiscount
             req.session.message = ''
             return res.render('user/checkout', { cart, user, shippingAddress, message,discount})
          }
@@ -379,7 +382,7 @@ module.exports = {
       const shippingAddress = user.shippingAddress
       discount = req.session.addeddiscount
       console.log(discount)
-      req.session.addeddiscount= 0
+      req.session.addeddiscount
       const message =''
       return res.render('user/checkout', { cart, user, shippingAddress, message,discount})
         }
@@ -390,8 +393,9 @@ module.exports = {
             const cart = user.cart
             const shippingAddress = user.shippingAddress
             const message = ""
+            discount = req.session.addeddiscount
             discount = {discount: 0}
-            return res.render('user/checkout', { cart, user, shippingAddress, message,discount })
+            return res.render('user/checkout', { cart, user, shippingAddress, message,discount})
          }
 
       }
@@ -543,6 +547,154 @@ module.exports = {
 
       }
    },
+//    placeorderPaypal: async(req,res)=>{
+//  const request = new paypal.orders.OrdersCreateRequest()
+ 
+ 
+//  const user = await User.findById(req.session.user._id)
+//  .populate('cart.productId')
+
+// let address = []
+// user.shippingAddress.forEach(item => {
+//  if (req.body.address == item._id) {
+//     console.log(item);
+//     address.push(item)
+// }
+// })
+// const total = user.cartTotal
+// const order = new Orders({
+//    customerId: req.session.user._id,
+//    address: address,
+//    number: user.number,
+//    totalAmount: total,
+//    paymentMethod: "Paypal",
+//    paymentVerified: false,
+// })
+// user.cart.forEach(item => {
+//    const items = {
+//       productId: item.productId._id,
+//       productName: item.productId.productname,
+//       color: item.productId.color,
+//       size: item.productId.size,
+//       quantity: item.quantity,
+//       price: item.productId.price,
+//       image: item.productId.images[0],
+//       orderStatus :'Pending'
+//    }
+//    order.items.push(items)
+// })
+// await order.save()
+
+// request.prefer("return-representation")
+// request.requestBody({
+//    intent :'CAPTURE',
+//    purchase_units:[
+// {
+//    amount :{
+//       currency_code: 'INR',
+//       value : total,
+//       breakdown:{
+//          item_total:{
+//             currency_code:'INR',
+//             value : total
+//          }
+//       }
+//    },
+  
+// }
+//    ]
+// })
+// try{
+// const order = await paypalClient.execute(request)
+// res.json({
+//    successStatus:true,
+//    id :order.result.id})
+// }catch(err){
+// console.log(err);
+// }
+  
+//    },
+
+paypalPayment :async(req,res)=>{
+   console.log("start 1")
+   console.log(process.env.PAYPAL_CLIENT_ID);
+   console.log(process.env.PAYPAL_CLIENT_SECRET);
+   const request = new paypal.orders.OrdersCreateRequest()
+  
+
+   const user = await User.findById(req.session.user._id)
+ .populate('cart.productId')
+
+let address = []
+user.shippingAddress.forEach(item => {
+ if (req.body.address == item._id) {
+    console.log(item);
+    address.push(item)
+}
+console.log("start 2");
+})
+const total = user.cartTotal
+console.log(total);
+const order = new Orders({
+   customerId: req.session.user._id,
+   address: address,
+   number: user.number,
+   totalAmount: total,
+   paymentMethod: "Paypal",
+   paymentVerified: false,
+})
+console.log("start 3");
+user.cart.forEach(item => {
+   const items = {
+      productId: item.productId._id,
+      productName: item.productId.productname,
+      color: item.productId.color,
+      size: item.productId.size,
+      quantity: item.quantity,
+      price: item.productId.price,
+      image: item.productId.images[0],
+      orderStatus :'Pending'
+   }
+   order.items.push(items)
+})
+console.log("start 4");
+await order.save()
+request.prefer("return=representation")
+request.requestBody({
+   intent :'CAPTURE',
+   purchase_units:[
+{
+   amount :{
+      currency_code: 'USD',
+      value : total,
+      breakdown:{
+         item_total:{
+            currency_code:'USD',
+            value : total
+         }
+      }
+   },
+ 
+}
+   ]
+})
+console.log("start 5")
+try{
+   console.log(request)
+const order = await paypalClient.execute(request)
+console.log(order)
+console.log("start 7")
+res.json({
+   id :order.result.id})
+
+}catch(err){
+console.log(err);
+}
+  
+   },
+
+
+
    getOrder: async (req, res) => {
       const user = await User.findById(req.session.user._id)
       const orders = await Orders.find({ customerId: req.session.user._id })
@@ -843,6 +995,14 @@ try{
     
 
  
-   
+ 
+// items:{
+//    name :user.cart.productId.productname,
+//    unit_amount :{
+//       currency_code :'INR',
+//       value :user.cart.productId.price,
+//       quantity :user.cart.quantity
+//    }
+// }
 
 

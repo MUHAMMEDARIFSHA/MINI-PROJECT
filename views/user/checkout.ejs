@@ -2,6 +2,7 @@
 <html lang="en">
 <%-include('../partials/head') %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
 
   <body>
     <%-include ('../partials/user/user-navbar') %>
@@ -96,8 +97,8 @@
                     </small>
                     <% if(shippingAddress.length>0 ){ %>
                       <% shippingAddress.forEach(item=> { %>
-                        <div class="form-check">
-                          <input class="radio" type="radio" name="address" value="<%= item._id %>">
+                        <div class="form-check "  >
+                          <input class="radio " checked type="radio" name="address" value="<%= item._id %>">
                           <label class="radio fw-bold">
                             <%= item.address %>,
                               <%= item.city %>,
@@ -173,6 +174,9 @@
                       onclick="Payment(this.id)">
                       Razorpay
                     </button>
+                    <div class="mt-3" style="text-align: center;">
+                      <div id="paypal-button-container"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -188,6 +192,50 @@
         <script src="/script/scriptadmin.js"></script>
         <script src="/script/payment.js"></script>
         <script defer src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AXTvnfRIN6zxY49XU9KDM0kHX1Oul3HmdturnnefSaicyTUs4ZuTDyDIWfwt8v9hbBx9EO59GuzIDmTs&components=buttons"></script>
+        
+           <script>
+
+           
+paypal.Buttons({
+  style: {
+    layout: 'vertical',
+    color:  'gold',
+    shape:  'rect',
+    label:  'paypal'
+  },
+
+      
+      createOrder: () => {
+        const address = document.querySelector('input[name = "address"]:checked').value
+        console.log("paypal started");
+        return fetch('/create-paypalorder',{
+          method :"POST",
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify({
+            address
+        }) })
+          .then(res =>{
+            if(res.ok)return res.json()
+            return res.json().then( json => Promise.reject(json))
+          }).then(({id})=>{
+            console.log(id);
+            return id
+          })
+        .catch(e=>{
+          console.error(e.error)
+        })
+      },
+      
+      onApprove: (data, actions) => {
+        return actions.order.capture() 
+           }  
+      }) .render('#paypal-button-container');
+      1
+  </script>
+        </script>
   </body>
 
 </html>

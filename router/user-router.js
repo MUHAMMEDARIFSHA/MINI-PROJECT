@@ -33,6 +33,7 @@ router.post('/edituser/:id',userControls.editUser)
 router.post('/payment/cod',userControls.placeorderCod)
 router.post('/add/address/:id',userControls.addAddress)
 router.post('/payment/razorpay',userControls.placeorderRazorpay)
+router.post('/create-paypalorder',session.isLogged,userControls.paypalPayment)
 router.post('/checkout/addcoupon',userControls.addCoupon)
 
 router.post('/payment/verify',session.isLogged,userControls.paymentVerify)
