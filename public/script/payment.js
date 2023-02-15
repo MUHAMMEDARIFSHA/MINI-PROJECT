@@ -2,11 +2,12 @@
 
 //  Razorpay
 
-  async function Payment(buttonid){
+  async function Payment(buttonid,discount){
     const button = document.getElementById(buttonid)
     const address = document.querySelector('input[name = "address"]:checked').value
     const url = "payment/razorpay"
     button.disabled = true
+    console.log(discount)
     try {
         const response = await fetch(url, {
           method: 'POST',
@@ -14,14 +15,15 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            address
+            address,
+            discount
           })
         })
         const res = await response.json()
         if(res.successStatus){
           check(res.orderInstance, res.user)
         }else{
-          window.location.href = '/checkout'
+           window.location.href = '/checkout'
         }
       } catch (err) {
             }
@@ -78,7 +80,7 @@
         })
         const res = await response.json()
         if(res.successStatus){
-          window.location.href = '/ordersucces'
+          window.location.href = '/payment/cod'
         }else{
           window.location.href = '/paymentfail'
         }

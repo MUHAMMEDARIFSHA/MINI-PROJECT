@@ -155,12 +155,21 @@ function changeQuantity(id,amount,count){
     }).then((response)=> response.json())
     .then((response)=>{
         if(response.successStatus){
-          document.getElementById(id).value  = response.quantity
-             window.location.reload()
-            
+    
+          document.getElementById(id).value  = response.count
+         const total= document.getElementById('totalamount1')
+         total.innerText=response.totalamount
+         document.getElementById('productprice').innerText = response.totalamount
+            document.getElementById(count).innerHTML = ""  
         }
         else{
-            document.getElementById(count).innerHTML = response.message
+            if(response.quantity){
+                  if(response.totalStoke===response.quantity  ){
+                console.log(response.totalStoke,response.quantity);
+                // document.getElementById(totalamount).innerHTML  = response.total
+                document.getElementById(count).innerHTML = "Out of stoke" 
+            }
+            }
         }
     }).catch((err) => console.log(err))
 

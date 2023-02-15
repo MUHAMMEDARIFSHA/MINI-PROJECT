@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
     <%-include ('../partials/head') %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <body>
   <%-include('../partials/admin/dash-navbar') %>
   <h2>DASHBOARD</h2>
 
 
+   <section class="container">
+    <div class="d-flex align-items-center ">
+      <div style="width: 1000px ;margin-left: 150px;"><canvas  id="saleschart"></canvas></div>
+    </div>
+   </section>
+
+    <!-- <script type="module" src="dimensions.js"></script> -->
+  
     <%-include ('../partials/bottom-navbar')%>
+    <script src="/script/chart.js"></script>
 </body>
 </html>

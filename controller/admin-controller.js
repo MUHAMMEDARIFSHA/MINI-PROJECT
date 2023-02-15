@@ -383,6 +383,104 @@ module.exports = {
         catch (err) {
             console.log(err);
         }
+    },
+    getOrderDetails: async(req,res)=>{
+        try{
+            const orders = await Orders.aggregate([
+                {
+                  $unwind: '$items'
+                },
+                {
+                  $match: {
+                    cancelled: false,
+                     paymentVerified:true,
+                  }
+                },
+                {
+                  $group: {
+                    _id: {$dayOfYear: '$createdAt'},
+                    date: {$first: '$createdAt'},
+                    totalSpent: {$sum: '$totalAmount'} 
+                  }
+                },
+                {
+                  $sort: {
+                    date: 1
+                  }
+                }
+          
+              ])
+              console.log(orders +"1orders");
+              res.json({orders})  
+
+        }
+        catch(err){
+            console.log(err);
+        }
+    },
+    getSalesDetails:async(req,res)=>{
+        try{
+            const orders = await orderModel.aggregate([
+                {
+                  $unwind: '$items'
+                },
+                {
+                  $addFields: {
+                    currMonth: {
+                      '$month' : new Date()
+                    },
+                    docMonth: {
+                      '$month': '$createdAt'
+                    }
+                  }
+                },
+                {
+                  $match: {
+                    isCancelled: false,
+                    paymentVerified: true,
+                    $expr: {
+                      $eq: ['$currMonth', '$docMonth']
+                    }
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'coupons',
+                    localField: 'couponId',
+                    foreignField: '_id',
+                    pipeline: [{
+                      $project: {
+                        code: 1
+                      }
+                    }],
+                    as: 'couponDetails'
+                  }
+                },
+                {
+                  $lookup: {
+                    from: 'users',
+                    localField: 'customerId',
+                    foreignField: '_id',
+                    pipeline: [{
+                      $project: {
+                        username :1,
+                        email: 1
+                      }
+                    }],
+                    as: 'customerId'
+                  }
+                }
+              ])
+           
+      
+        
+          console.log(orders +"puppeteer orders");
+         res.render('',{orders})
+
+    }
+    catch(err){
+        console.log(err);
+    }
     }
 
 }

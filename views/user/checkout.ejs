@@ -152,7 +152,7 @@
                       </li>
                       <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                         Discount
-                        <span class="fw-bold"><%= discount.discount %> </span>
+                        <p id="discount1" name="discount1" class="fw-bold"><%= discount.discount %> </p> 
                       </li>
                       <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                         <div>
@@ -161,17 +161,17 @@
                             <p class="mb-0">(including GST)</p>
                           </strong>
                         </div>
-                        <p class=""><strong>₹ <%=Math.round(user.cartTotal-(discount.discount))%></strong></p>
+                        <p class="fw-bold" id="totalamount1">₹ <%=Math.round(user.cartTotal-(discount.discount))%></p>
                       </li>
                      
                     </ul>
                     <h5></h5>
-                    <button type="submit" formaction=" /payment/cod"
+                    <button type="submit" formaction=" /payment/cod/<%=discount.discount %>"
                       class="btn btn-secondary btn-lg btn-block text-dark">
                       CASH ON DELIVERY
                     </button>
                     <button type="button" class="btn btn-secondary btn-lg btn-block text-dark" id="pay"
-                      onclick="Payment(this.id)">
+                      onclick="Payment(this.id,'<%= Math.round( discount.discount) %>')">
                       Razorpay
                     </button>
                     <div class="mt-3" style="text-align: center;">
@@ -208,6 +208,8 @@ paypal.Buttons({
       
       createOrder: () => {
         const address = document.querySelector('input[name = "address"]:checked').value
+         const discount = document.querySelector('#discount1').innerText
+         console.log(discount)
         console.log("paypal started");
         return fetch('/create-paypalorder',{
           method :"POST",
@@ -215,7 +217,8 @@ paypal.Buttons({
             'Content-Type': 'application/json'
           },
           body:JSON.stringify({
-            address
+            address,
+           discount : Math.round(discount)
         }) })
           .then(res =>{
             if(res.ok)return res.json()
@@ -230,10 +233,15 @@ paypal.Buttons({
       },
       
       onApprove: (data, actions) => {
+        console.log("sucesss");
         return actions.order.capture() 
+        .then (function (orderdata){
+          window.location = '/payment/cod'
+        })
+      
            }  
       }) .render('#paypal-button-container');
-      1
+      
   </script>
         </script>
   </body>

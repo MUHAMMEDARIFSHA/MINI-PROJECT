@@ -15,11 +15,10 @@
                   <th scope="col-" class="fs-5">User</th>
                   <th scope="col-" class="fs-5">Product</th>
                   <th scope="col-" class="fs-5">Total Quantity</th>
-                  <th scope="col-" class="fs-5">Amount</th>
-                  <th scope="col-" class="fs-5">Total Amount</th>
+                  <th scope="col-" class="fs-5"> Price per Item </th>
+                  <th scope="col-" class="fs-5">Total Amount(including discount)</th>
                   <th scope="col-" class="fs-5">Payment Method</th>
                   <th scope="col-" class="fs-5">Address / Date</th>
-                  <!-- <th scope="col-" class="fs-5">Date</th> -->
                   <th scope="col" class="fs-5">Actions</th>
                 </tr>
               </thead>
@@ -60,7 +59,8 @@
 
                         </td>
                         <td class="fs-6 fw-bold">
-                          ₹ <%=amount %>
+                          
+                          ₹ <%= Math.round( orders.totalAmount) %>
                         </td>
                         <td class="fs-6 fw-bold">
                           <%=orders.paymentMethod %>

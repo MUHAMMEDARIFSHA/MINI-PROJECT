@@ -54,7 +54,7 @@
             
                 <div class="d-flex mb-4" style="max-width: 120px; max-height: 37px;;">
                   <button class="reduce-button btn-secondary px-3 me-2" 
-                    onclick="changeQuantity ('<%= item.productId.id %>',-1,'<%=count %>')">
+                    onclick="changeQuantity ('<%= item.productId.id %>',-1,'<%=count %>','totalamount')">
                     <i class="fa fa-minus"></i>
                   </button>
 
@@ -64,7 +64,7 @@
                   </div>
 
                   <button class="increment-button btn-secondary px-3 ms-2"
-                    onclick="changeQuantity('<%= item.productId.id %>',+1,'<%=count %>')">
+                    onclick="changeQuantity('<%= item.productId.id %>',+1,'<%=count %>','totalamount')">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
@@ -99,7 +99,7 @@
               <li
                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0 ">
                 Products
-                <span>₹ <%= user.cartTotal %></span>
+                <span id="productprice">₹ <%= user.cartTotal %></span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Shipping
@@ -113,14 +113,13 @@
                     <p class="mb-0">(including GST)</p>
                   </strong>
                 </div>
-                <span><strong>₹ <%=user.cartTotal %></strong></span>
+                <span class="fw-bold" id="totalamount1">₹ <%=user.cartTotal %></span>
               </li>
             </ul>
 
             <button type="button"  class="btn btn-secondary btn-lg btn-block" >
               <a href="/checkout" class="text-decoration-none text-dark">PLACE ORDER</a>
-              
-            </button>
+               </button>
           </div>
         </div>
       </div>

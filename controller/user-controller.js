@@ -131,9 +131,12 @@ module.exports = {
    },
    redirectHomepage: async (req, res) => {
       const user = await User.find({ email: req.body.email })
-
+      const datapassword = user[0].password;
+      
       if (user.length != 0) {
-         const match = bcrypt.compare(req.body.password, user[0].password)
+          const password1 = req.body.password
+      const match = await bcrypt.compare(password1,datapassword)
+         
          if (!match) {
             req.session.message = "password not correct"
             res.redirect('/login')
@@ -299,24 +302,25 @@ module.exports = {
                }
             }
          })
-         if (totalStoke - quantity <= 0 && req.body.amount > 0) {
-            req.session.message = "Out of Stock"
-            let message = req.session.message
-            req.session.message = ''
-            return res.json({ successStatus: false, message })
-         }
+          if (totalStoke - quantity <= 0 && req.body.amount > 0) {
+            
+          return res.json({ successStatus: false,
+            totalStoke,
+            quantity,
+            totalamount : user.cartTotal + total
+          })
+          }
 
          let newquantity = req.body.amount
          let count = quantity + req.body.amount
 
 
-         console.log(count)
          if (flag) {
             await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': newquantity, cartTotal: total } })
             return res.json({
                successStatus: true,
-               quantity: count,
-
+                count,
+                totalamount : user.cartTotal + total
             })
 
          }
@@ -408,6 +412,8 @@ module.exports = {
    },
 
    placeorderCod: async (req, res) => {
+      const discount = req.params.discount
+      console.log(discount +"is the discounted amount");
       if (!req.body.address) {
          req.session.message = "Please select a Address"
          res.redirect('/checkout')
@@ -426,7 +432,7 @@ module.exports = {
 
                }
             })
-            const total = user.cartTotal
+            const total = (user.cartTotal-discount)
             const order = new Orders({
                customerId: req.session.user._id,
                address: address,
@@ -435,6 +441,25 @@ module.exports = {
                paymentMethod: "Cash On Delivery",
                paymentVerified: true,
             })
+            // if(req.body.coupon){
+            //    order.couponId = req.body.couponId
+            //    const coupon = await Coupons.findById(req.body.couponId)
+            //    if(coupon.users.includes(req.session.user._id)){
+            //      return res.redirect('/checkout')
+            //    }
+            //    let discount;
+              
+            //      if(coupon.isPercentage){
+            //        discount = total * coupon.discount/100
+            //      }else{
+            //        discount = coupon.discount
+            //      }
+            //      req.session.couponApplied = null
+            //    }
+            //    order.totalAmount = Math.round(total  - discount)
+            //    await couponModel.findOneAndUpdate({_id: req.body.couponId}, {$push: {users: req.session.user._id}})
+             
+
 
             user.cart.forEach(item => {
                const items = {
@@ -460,7 +485,7 @@ module.exports = {
                await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $set: { cartTotal: 0 } })
                await User.findOneAndUpdate({ _id: user._id }, { $pull: { cart: { 'productId': productId } } })
             }
-            await User.findOneAndUpdate({ _id: user._id }, { $inc: { totalSpent: total } })
+            await User.findOneAndUpdate({ _id: user._id }, { $inc: { totalSpent: (total-discount) } })
             return res.redirect('/payment/cod')
 
          }
@@ -476,10 +501,11 @@ module.exports = {
          res.redirect('/checkout')
       }
       else{
-
+      let discount = req.body.discount
       const address = req.body.address
       console.log(address)
-      
+      console.log(discount +"the discount in razorpay")
+
          try{
             const user = await User.findById(req.session.user._id)
                .populate('cart.productId')
@@ -492,8 +518,10 @@ module.exports = {
 
                }
             })
-
-            const total = user.cartTotal
+             let total = -discount
+              console.log (total+"discount")
+                total = (total + user.cartTotal) 
+             console.log(total+"cart amount");
             const order = new Orders({
                customerId: req.session.user._id,
                address: address,
@@ -531,6 +559,7 @@ module.exports = {
                  console.log(err)
                  return res.json({successStatus: false})
                }
+               console.log("order instance created");
                console.log(orderInstance)
                return res.json({
                  successStatus: true,
@@ -624,16 +653,22 @@ paypalPayment :async(req,res)=>{
 
    const user = await User.findById(req.session.user._id)
  .populate('cart.productId')
-
+let discount = req.body.discount
+console.log(discount+"discount of paypal");
 let address = []
 user.shippingAddress.forEach(item => {
  if (req.body.address == item._id) {
     console.log(item);
     address.push(item)
 }
+
 console.log("start 2");
 })
-const total = user.cartTotal
+let total = -discount
+ console.log (total+"discount paypal")
+total = (total + user.cartTotal) 
+   console.log(total+"cart amount paypal");
+
 console.log(total);
 const order = new Orders({
    customerId: req.session.user._id,
@@ -643,6 +678,7 @@ const order = new Orders({
    paymentMethod: "Paypal",
    paymentVerified: false,
 })
+let orderid
 console.log("start 3");
 user.cart.forEach(item => {
    const items = {
@@ -656,6 +692,8 @@ user.cart.forEach(item => {
       orderStatus :'Pending'
    }
    order.items.push(items)
+    orderid = order.id
+   
 })
 console.log("start 4");
 await order.save()
@@ -686,18 +724,21 @@ console.log(order)
 console.log("start 7")
 res.json({
    id :order.result.id})
+   const order1 = await Orders.find({id:orderid})
+   console.log(order1);
+  
+await User.findOneAndUpdate({ _id: req.session.user._id },{$set:{ cartTotal: 0 }})
+     
+ await User.findOneAndUpdate({id:req.session.user.id},{$set:{cart:[],}})
 
 }catch(err){
 console.log(err);
 }
   
    },
-
-
-
    getOrder: async (req, res) => {
       const user = await User.findById(req.session.user._id)
-      const orders = await Orders.find({ customerId: req.session.user._id })
+      const orders = await Orders.find({ customerId: req.session.user._id }).sort({createdAt:-1})
       return res.render('user/order-details', { orders, user })
 
    },
@@ -989,6 +1030,81 @@ try{
       })
      }
 
+   },
+   getForgetPassword:async(req,res)=>{
+      if(req.session.message){
+         const message = req.session.message
+         req.session.message = ''
+         return res.render('user/forget-password',{message})
+      }
+      const message =""
+      return res.render('user/forget-password',{message})
+   },
+   forgotPassword:async(req,res)=>{
+try{
+      const mobilenumber = req.body.number
+      req.session.mobilenumber = mobilenumber
+      console.log(mobilenumber)
+      const number = await User.find({number:req.body.number})
+      if(!req.body.number){
+         req.session.message= "Enter a Mobile Number"
+         return res.redirect('/forgot-password')
+      }
+      else if(!/^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/.test(String(mobilenumber))){
+        req.session.message = "Enter a valid Mobile Number"
+        return res.redirect('/forgot-password')
+      }
+      else if(number.length <= 0){
+         req.session.message="Enter registered mobile number"
+         return res.redirect('/forgot-password')
+      }
+      else if(number.length>0){
+         await message.sentotp(mobilenumber)
+         res.redirect('/otpforgot')
+      }
+   }
+catch(err){
+   console.log(err);
+}
+      
+},
+getOtpforgot:(req,res)=>{
+   return res.render('user/otp-forgot')
+},
+checkForgot:async(req,res)=>{
+ const otp = req.body.otp
+
+ if(otp.length == 0){
+   req.session.message="Enter otp"
+   return res.redirect('/otpforgot')
+ }
+ else{
+   const check = await message.check(otp,req.session.mobilenumber)
+   if (check.status == "approved") {
+      req.session.message = ""
+      return res.redirect('/edit-password')
+   }
+   else{
+      req.session.message = "Invalid Otp"
+      return res.redirect('/otpforgot')
+   }
+ }
+},
+getEditPassword:(req,res)=>{
+   return res.render('user/edit-password')
+},
+editPassword:async(req,res)=>{
+   try{
+   const newpassword = req.body.newpassword
+   const password = await bcrypt.hash(newpassword, 10)
+   console.log(password);
+   await User.findOneAndUpdate({number :req.session.mobilenumber},{$set:{password :password}})
+   res.redirect('/login')
+   
+   }
+   catch(err){
+      console.log(err);
+   }
    }
 }
 
@@ -996,13 +1112,6 @@ try{
 
  
  
-// items:{
-//    name :user.cart.productId.productname,
-//    unit_amount :{
-//       currency_code :'INR',
-//       value :user.cart.productId.price,
-//       quantity :user.cart.quantity
-//    }
-// }
+
 
 
