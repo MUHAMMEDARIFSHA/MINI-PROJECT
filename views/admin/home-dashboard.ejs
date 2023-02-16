@@ -7,14 +7,14 @@
   <%-include('../partials/admin/dash-navbar') %>
   <h2>DASHBOARD</h2>
 
-
+    <button class="btn btn-danger"><a  href="/admin/sales-report/pdf" method="post">pdf</a></button>
    <section class="container">
     <div class="d-flex align-items-center ">
       <div style="width: 1000px ;margin-left: 150px;"><canvas  id="saleschart"></canvas></div>
     </div>
    </section>
 
-    <!-- <script type="module" src="dimensions.js"></script> -->
+    
   
     <%-include ('../partials/bottom-navbar')%>
     <script src="/script/chart.js"></script>

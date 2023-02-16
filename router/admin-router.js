@@ -47,6 +47,7 @@ router.get('/order-details',session.isLogged,adminControls.getOrderDetails)
 
 router.get('/sale-details',session.isLogged,adminControls.getSalesDetails)
 
+
 router.post('/adminlogin',adminControls.redirectAdminhome)
 
 router.post('/categories/add',adminControls.addCategory)

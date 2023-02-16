@@ -6,6 +6,8 @@ const User = require('../models/user')
 const {upload} = require('../db/multer')
 const Orders = require('../models/order')
 const Coupons = require('../models/coupon')
+const puppeteer = require('puppeteer');
+
 module.exports = {
     getAdminlogin: (req, res) => {
         if (req.session.message) {
@@ -420,67 +422,81 @@ module.exports = {
     },
     getSalesDetails:async(req,res)=>{
         try{
-            const orders = await orderModel.aggregate([
-                {
-                  $unwind: '$items'
-                },
-                {
-                  $addFields: {
-                    currMonth: {
-                      '$month' : new Date()
-                    },
-                    docMonth: {
-                      '$month': '$createdAt'
-                    }
-                  }
-                },
-                {
-                  $match: {
-                    isCancelled: false,
-                    paymentVerified: true,
-                    $expr: {
-                      $eq: ['$currMonth', '$docMonth']
-                    }
-                  }
-                },
-                {
-                  $lookup: {
-                    from: 'coupons',
-                    localField: 'couponId',
-                    foreignField: '_id',
-                    pipeline: [{
-                      $project: {
-                        code: 1
-                      }
-                    }],
-                    as: 'couponDetails'
-                  }
-                },
-                {
-                  $lookup: {
-                    from: 'users',
-                    localField: 'customerId',
-                    foreignField: '_id',
-                    pipeline: [{
-                      $project: {
-                        username :1,
-                        email: 1
-                      }
-                    }],
-                    as: 'customerId'
-                  }
-                }
-              ])
-           
-      
+         const orders = await Orders.find({$match:{cancelled:false,paymentVerified :true}})
+         .populate('customerId')
+               
+              
         
           console.log(orders +"puppeteer orders");
-         res.render('',{orders})
+         res.render('admin/sales-details',{orders})
 
     }
     catch(err){
         console.log(err);
     }
-    }
+    },
+    salesReportPdf:async (req,res) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  
+  // Navigate to the web page
+  await page.goto('http://localhost:4000/admin/sale-report', {waitUntil: 'networkidle2'});
+
+  // Set the paper size and orientation
+  await page.emulateMedia('print');
+  await page.evaluate(() => {
+    let css = '@page { size: A4 landscape; }';
+    let head = document.querySelector('head');
+    let style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(css));
+    head.appendChild(style);
+  });
+
+  // Wait for any lazy-loaded images or content to load
+  await page.waitForTimeout(2000);
+
+  // Generate a PDF of the web page and save it to disk
+  await page.pdf({path: 'sale-report.pdf', format: 'A4', landscape: true, printBackground: true});
+
+  await browser.close();
+},
 
 }
+
+
+
+
+
+
+
+
+
+// {
+//     $lookup: {
+//       from: "customers",
+//       localField: "customerId",
+//       foreignField: "_id",
+//       as: "customer"
+//     }
+//   },
+//   {
+//     $unwind: "$customer"
+//   },
+//   {
+//     $project: {
+//       _id: 1,
+//       address: 1,
+//       totalAmount: 1,
+//       paymentMethod: 1,
+//       paymentVerified: 1,
+//       orderStatus: 1,
+//       cancelled: 1,
+//       return: 1,
+//       items: 1,
+//       createdAt: 1,
+//       updatedAt: 1,
+//       "customer.name": 1
+//     }
+//   }
+// ]);
