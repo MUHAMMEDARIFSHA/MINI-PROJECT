@@ -10,16 +10,16 @@
     <form action="/admin/products/addproducts" method="post" enctype="multipart/form-data" >
         <div class="mb-2">
             <label for="productname" class="form-label fw-bold fs-5">Product Name</label>
-            <input type="text" class="form-control border-2 border-secondary" id="productname" name="productname" placeholder="">
+            <input type="text" class="form-control border-2 border-secondary" id="productname" name="productname" placeholder="" required>
           </div>
           <div class="mb-2">
             <label for="colour" class="form-label fw-bold fs-5 ">Colour</label>
-            <input type="text" class="form-control w-50 border-2 border-secondary" id="colour" name="colour" placeholder="">
+            <input type="text" class="form-control w-50 border-2 border-secondary" id="colour" name="colour" placeholder="" required>
           </div>
           
           <div class="col-md-4">
             <label for="size" class="form-label fw-bold fs-5">SIZE</label>
-            <select id="size" name="size" class="form-select fw-bold border-2 border-secondary">
+            <select id="size" name="size" class="form-select fw-bold border-2 border-secondary" required>
               
               <option  class="fw-bold">S</option>
                   <option class="fw-bold">M</option>
@@ -29,7 +29,7 @@
           </div> 
            <div class="col-md-4">
             <label for="category" class="form-label fw-bold fs-5">Category</label>
-            <select id="category" name="categoryId" class="form-select fw-bold border-2 border-secondary">
+            <select id="category" name="categoryId" class="form-select fw-bold border-2 border-secondary" required>
               <!-- <option selected>Choose...</option> -->
               <% if(category.length>0){ %> 
                 <% category.forEach(item => { %> 
@@ -40,21 +40,25 @@
           </div> 
     <div class="mb-2">
         <label for="totalstoke" class="form-label fw-bold fs-5 ">Total Stoke</label>
-        <input type="number" class="form-control w-50 border-2 border-secondary" id="totalstoke" name="totalstoke" placeholder="">
+        <input type="number" class="form-control w-50 border-2 border-secondary" id="totalstoke" name="totalstoke" placeholder="" required>
       </div>
       <div class="col-md-4">
         <label class="form-label fw-bold fs-5" for="price">Price</label>
-        <input type="number" name="price" id="price" class="form-control border-2 border-secondary w-50" value="">
+        <input type="number" name="price" id="price" class="form-control border-2 border-secondary w-50" value="" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-bold fs-5" for="price">Offer Percentage</label>
+        <input type="number" name="offer" id="offer" max="95" min="0" class="form-control border-2 border-secondary w-50" value="" >
       </div>
           <div class="mb-2">
             <label for="description" class="form-label fw-bold fs-5">Description</label>
-            <textarea class="form-control border-2 border-secondary" id="description" name="description" rows="3"></textarea>
+            <textarea class="form-control border-2 border-secondary" id="description" name="description" rows="3" required></textarea>
           </div> 
           <div class="mb-2">
             <label for="image" class="form-label fw-bold fs-5">Images</label>
-            <input class="form-control border-2 border-secondary" type="file" id="image" name="image" >
-            <input class="form-control border-2 border-secondary" type="file" id="image2" name="image2" >
-            <input class="form-control border-2 border-secondary" type="file" id="image3" name="image3" >
+            <input class="form-control border-2 border-secondary" type="file" id="image" name="image" required>
+            <input class="form-control border-2 border-secondary" type="file" id="image2" name="image2" required>
+            <input class="form-control border-2 border-secondary" type="file" id="image3" name="image3"  required>
           </div>
 
           <div class=" ">
@@ -70,4 +74,4 @@
   <%-include('../../partials/bottom-navbar') %>
 </body>
 </html>
-<script defer src="https://cdn.crop.guide/loader/l.js?c=SDMRSY"></script>
+<!-- <script defer src="https://cdn.crop.guide/loader/l.js?c=SDMRSY"></script> -->

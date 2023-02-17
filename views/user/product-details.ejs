@@ -55,8 +55,12 @@
 
             </div>
             <div class="pt-2 product-details-price fs-2 fw-bold">
-              <p> ₹ <%= product.price %>
-              </p>
+              <% if(product.offer>0 ){ %>
+                <p> ₹ <%= Math.round( (product.price)-( product.price *(product.offer/100))) %>
+                <span class="text-primary">(<%=product.offer %>%)</span></p>
+           <%   } else{ %>
+              <p> ₹ <%= product.price %></p>
+          <% } %>
             </div>
             <div class="fs-4 ">
               <p>

@@ -34,6 +34,9 @@ productSchema = new mongoose.Schema({
         type :Number,
         require : [true,'Enter Price' ]
     },
+    offer:{
+       type :Number
+    },
 
     isDeleted: {
         type: Boolean,

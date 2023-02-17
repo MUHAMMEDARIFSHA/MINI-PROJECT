@@ -221,8 +221,10 @@ module.exports = {
                 color: req.body.colour,
                 size: req.body.size,
                 price: req.body.price,
+                offer :req.body.offer,
                 description: req.body.description,
                 totalStoke: req.body.totalstoke,
+
                 categoryId: req.body.categoryId,
                 images : images
             })
@@ -412,7 +414,6 @@ module.exports = {
                 }
           
               ])
-              console.log(orders +"1orders");
               res.json({orders})  
 
         }
@@ -421,13 +422,14 @@ module.exports = {
         }
     },
     getSalesDetails:async(req,res)=>{
+        console.log("sale report page");
         try{
-         const orders = await Orders.find({$match:{cancelled:false,paymentVerified :true}})
+         const orders = await Orders.find({$match:{cancelled:false,paymentVerified :true}}).sort({createdAt:-1})
          .populate('customerId')
                
               
         
-          console.log(orders +"puppeteer orders");
+          console.log("puppeteer orders");
          res.render('admin/sales-details',{orders})
 
     }
@@ -435,31 +437,20 @@ module.exports = {
         console.log(err);
     }
     },
+
+
     salesReportPdf:async (req,res) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  
-  // Navigate to the web page
-  await page.goto('http://localhost:4000/admin/sale-report', {waitUntil: 'networkidle2'});
-
-  // Set the paper size and orientation
-  await page.emulateMedia('print');
-  await page.evaluate(() => {
-    let css = '@page { size: A4 landscape; }';
-    let head = document.querySelector('head');
-    let style = document.createElement('style');
-    style.type = 'text/css';
-    style.appendChild(document.createTextNode(css));
-    head.appendChild(style);
-  });
-
-  // Wait for any lazy-loaded images or content to load
-  await page.waitForTimeout(2000);
-
-  // Generate a PDF of the web page and save it to disk
-  await page.pdf({path: 'sale-report.pdf', format: 'A4', landscape: true, printBackground: true});
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto('http://localhost:4000/admin/sale-details', {
+      waitUntil: 'networkidle2',
+    });
+    await page.pdf({ path: 'sales-details.pdf', format: 'a4', landscape: true });
 
   await browser.close();
+  res.download('sales-details.pdf', 'Sale Report.pdf')
+
+  
 },
 
 }

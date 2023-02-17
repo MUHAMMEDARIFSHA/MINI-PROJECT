@@ -34,7 +34,7 @@ router.post('/otp',userControls.addUser)
 router.post('/login',userControls.redirectHomepage)
 router.post('/edituser/:id',userControls.editUser)
 router.post('/payment/cod/:discount',userControls.placeorderCod)
-router.post('/add/address/:id',userControls.addAddress)
+router.post('/add/address',userControls.addAddress)
 router.post('/payment/razorpay',userControls.placeorderRazorpay)
 router.post('/create-paypalorder',session.isLogged,userControls.paypalPayment)
 router.post('/checkout/addcoupon',userControls.addCoupon)
@@ -53,6 +53,7 @@ router.patch('/orders/cancel',userControls.orderCancel)
 router.patch('/wishlist/add',userControls.addtoWishlist)
 router.patch('/wish/remove',userControls.removeWishItem)
 router.patch('/wishlist/cart/add',userControls.addtoCartfromWish)
+router.patch('/delete/address',userControls.deleteAddress)
 
 
 

@@ -54,7 +54,7 @@
             
                 <div class="d-flex mb-4" style="max-width: 120px; max-height: 37px;;">
                   <button class="reduce-button btn-secondary px-3 me-2" 
-                    onclick="changeQuantity ('<%= item.productId.id %>',-1,'<%=count %>','totalamount')">
+                    onclick="changeQuantity ('<%= item.productId.id %>',-1,'<%=count %>',)">
                     <i class="fa fa-minus"></i>
                   </button>
 
@@ -64,7 +64,7 @@
                   </div>
 
                   <button class="increment-button btn-secondary px-3 ms-2"
-                    onclick="changeQuantity('<%= item.productId.id %>',+1,'<%=count %>','totalamount')">
+                    onclick="changeQuantity('<%= item.productId.id %>',+1,'<%=count %>',)">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
@@ -73,9 +73,17 @@
                 </small>
                 <br>
                 <br>
-                <p class="text-start text-md-center fs-3">
+                <% if(item.productId.offer){ %>
+                        <p class="text-start text-md-center fs-3">
+                  <strong>₹<%= Math.round((item.productId.price)-(item.productId.price*item.productId.offer/100)) %></strong> 
+                  <span class="text-primary fs-5">(<%=item.productId.offer %>%)</span>
+                </p>
+               <% } else{ %>
+                  <p class="text-start text-md-center fs-3">
                   <strong>₹<%= item.productId.price %></strong>
                 </p>
+             <%   } %>
+                
                  </div>
             
           </div>
@@ -98,14 +106,17 @@
             <ul class="list-group list-group-flush">
               <li
                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0 ">
-                Products
-                <span id="productprice">₹ <%= user.cartTotal %></span>
+                Price
+                <p>₹<span id="productprice"> <%=user.cartTotal %></span></p>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Shipping
                 <span>₹ 0.00</span>
               </li>
-              <li
+          
+             
+         
+          <li
                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                 <div>
                   <strong>Total amount</strong>
@@ -113,10 +124,17 @@
                     <p class="mb-0">(including GST)</p>
                   </strong>
                 </div>
-                <span class="fw-bold" id="totalamount1">₹ <%=user.cartTotal %></span>
+                
+              <%   let totalValue = cart.reduce((sum, item) => sum += item.productId?.offer ?( item.productId.price- item.productId.price * item.productId?.offer / 100) : item.productId.price * item.quantity, 0); %>
+                  
+                  <p>₹ <span class="fw-bold" id="totalamount1"><%= Math.round(user.cartTotal) %></span></p>
+              
+            
+                
               </li>
-            </ul>
 
+            </ul>
+            
             <button type="button"  class="btn btn-secondary btn-lg btn-block" >
               <a href="/checkout" class="text-decoration-none text-dark">PLACE ORDER</a>
                </button>

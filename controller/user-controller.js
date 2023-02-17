@@ -209,20 +209,31 @@ module.exports = {
       
          const pro = await User.find({_id :user._id,'cart.productId' : productId})
          const product =await Products.findById({_id : productId})
-         const amount = product.price
+         let amount
+         if(product.offer > 0){
+         amount = (product.price-(product.price*product.offer/100))
+         }else{
+            amount = product.price
+         }
+         
          console.log(amount);
          try {
 
             if(pro.length>0){
-               await User.findOneAndUpdate({ _id:user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity':+1, cartTotal :amount} })
+               await User.findOneAndUpdate({ _id:user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity':+1, cartTotal :Math.round(amount)} })
             }
             else{
                const user = await User.findById(req.session.user._id)
                console.log(user)
                const product = await Products.findById(productId)
                console.log(product);
-      
-               const total = product.price
+               let total
+        if(product.offer>0){
+     total =  Math.round( product.price-(product.price*product.offer/100))
+        }else{
+         total = product.price
+        }
+           
                const cartItem = {
                   productId: productId,
                   quantity: 1
@@ -285,10 +296,25 @@ module.exports = {
    },
    changeQuantity: async (req, res) => {
       try {
+         let price
+         let offer
          const product = await Products.findById(req.body.id)
+          offer = Math.round( product.price*product.offer/100)
+         
+         if(product.offer>0){
+            price = Math.round((product.price)-(product.price*product.offer/100))
+            offer = Math.round( product.price*product.offer/100)
+            console.log(offer+"with offer");
+           
+ }else{
+            price = product.price
+            offer = 0
+            console.log(offer+"without offer");
+         }
          const productId = req.body.id
          const user = await User.findById(req.session.user._id)
-         let total = product.price * req.body.amount
+         let total = price * req.body.amount
+         console.log(total+"price");
          let flag = true
          let quantity;
          let totalStoke = product.totalStoke
@@ -307,20 +333,25 @@ module.exports = {
           return res.json({ successStatus: false,
             totalStoke,
             quantity,
-            totalamount : user.cartTotal + total
+            totalamount : user.cartTotal + total,
+            total,
+            offer
           })
+   
           }
-
+          console.log((user.cartTotal+ total)+"amount")
          let newquantity = req.body.amount
          let count = quantity + req.body.amount
-
+         let firstvalue = user.cartTotal
 
          if (flag) {
-            await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': newquantity, cartTotal: total } })
+            await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': newquantity, cartTotal: total} })
             return res.json({
                successStatus: true,
                 count,
-                totalamount : user.cartTotal + total
+                totalamount : firstvalue + total,
+                total,
+                offer
             })
 
          }
@@ -342,22 +373,18 @@ module.exports = {
    },
    getadddetails: async (req, res) => {
       const user = await User.findById(req.session.user._id)
-      return res.render('user/adddetails',{user})
+      const shippingAddress = user.shippingAddress
+      return res.render('user/adddetails',{user,shippingAddress})
    },
    editUser: async (req, res) => {
       console.log("edit");
       try {
-         const address = {
-            address: req.body.address,
-            city: req.body.city,
-            state: req.body.state,
-            pincode: req.body.pincode
-         }
+         
 
          const id = req.params.id
          const user = await User.findById(req.session.user.id)
          const updateUser = await User.findByIdAndUpdate({ _id: id }, req.body)
-         await User.findOneAndUpdate({ _id: req.session.user._id }, { $push: { shippingAddress: address } })
+        
          return res.redirect('/adddetails')
       }
       catch (err) {
@@ -375,7 +402,7 @@ module.exports = {
             const message = req.session.message
             discount = req.session.addeddiscount
             console.log(discount)
-            req.session.addeddiscount
+            req.session.addeddiscount = 0
             req.session.message = ''
             return res.render('user/checkout', { cart, user, shippingAddress, message,discount})
          }
@@ -386,7 +413,7 @@ module.exports = {
       const shippingAddress = user.shippingAddress
       discount = req.session.addeddiscount
       console.log(discount)
-      req.session.addeddiscount
+      req.session.addeddiscount=0
       const message =''
       return res.render('user/checkout', { cart, user, shippingAddress, message,discount})
         }
@@ -797,7 +824,7 @@ console.log(err);
    
             const id = req.params.id
             await User.findOneAndUpdate({ _id: req.session.user._id }, { $push: { shippingAddress: address } })
-            return res.redirect('/checkout')
+            return res.redirect('/adddetails')
          }
         
       }
@@ -936,7 +963,13 @@ try{
          const productId = req.body.id
          const pro = await User.find({_id :user._id,'cart.productId' : productId})
          const product =await Products.findById({_id : productId})
-         const amount = product.price
+
+         let amount
+         if(product.offer > 0){
+         amount = ( Math.round( product.price-(product.price*product.offer/100)))
+         }else{
+            amount = product.price
+         }
          console.log(amount);
          try {
 
@@ -954,7 +987,12 @@ try{
                const product = await Products.findById(productId)
                console.log(product);
       
-               const total = product.price
+               let total
+               if(product.offer>0){
+            total =  Math.round( product.price-(product.price*product.offer/100))
+               }else{
+                total = product.price
+               }
                const cartItem = {
                   productId: productId,
                   quantity: 1
@@ -1105,6 +1143,20 @@ editPassword:async(req,res)=>{
    catch(err){
       console.log(err);
    }
+   },
+   deleteAddress: async(req,res)=>{
+      try{
+         console.log("delete address");
+      const user = await User.find({_id : req.session.user._id})
+      const id = req.params.id
+      const address = await User.find({_id: req.session.user._id,'shippingAddress':id})
+      console.log(address);
+      await User.findOneAndUpdate({ _id: req.session.user._id ,'shippingAddress': id}, { $pull: { shippingAddress: address} })
+
+      }
+      catch(err){
+ console.log(err);
+      }
    }
 }
 

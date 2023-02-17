@@ -2,11 +2,10 @@
 
 //  Razorpay
 
-  async function Payment(buttonid,discount){
+  async function Payment(buttonid,discount,offer){
     const button = document.getElementById(buttonid)
     const address = document.querySelector('input[name = "address"]:checked').value
     const url = "payment/razorpay"
-    button.disabled = true
     console.log(discount)
     try {
         const response = await fetch(url, {
@@ -16,7 +15,8 @@
           },
           body: JSON.stringify({
             address,
-            discount
+            discount,
+            offer
           })
         })
         const res = await response.json()

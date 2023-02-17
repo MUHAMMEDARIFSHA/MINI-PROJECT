@@ -7,7 +7,11 @@
   <%-include('../partials/admin/dash-navbar') %>
   <h2>DASHBOARD</h2>
 
-    <button class="btn btn-danger"><a  href="/admin/sales-report/pdf" method="post">pdf</a></button>
+    <div class="d-flex justify-content-center mb-5">
+      <p class="fw-bold justify-content-center">DOWNLOAD THE SALES REPORT &nbsp &nbsp &nbsp</p>
+      <button class="btn btn-danger text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/pdf" method="post">PDF</a></button>
+      <button class="btn btn-success text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/excel" method="post">EXCEL</a></button>
+    </div>
    <section class="container">
     <div class="d-flex align-items-center ">
       <div style="width: 1000px ;margin-left: 150px;"><canvas  id="saleschart"></canvas></div>

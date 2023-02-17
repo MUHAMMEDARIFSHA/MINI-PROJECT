@@ -28,8 +28,14 @@
         <div class="dress-card-body">
           <h4 class="dress-card-title mt-1"><%= item.productname %></h4>
           <p class="dress-card-para"></p>
-          <p class="dress-card-para mt-1"><span class="dress-card-price fs-5"> ₹ <%=item.price %>&ensp;</span><span
-              class="dress-card-crossed mt-1"></span><span class="dress-card-off text-primary">&ensp;(60% OFF)</span></p>
+          <% if (item.offer>0){ %>
+            <p class="dress-card-para mt-1"><span class="dress-card-price fs-5"> ₹ <%= Math.round (item.price-(item.price *(item.offer/100))) %>&ensp;</span><span
+              class="dress-card-crossed mt-1"></span><span class="dress-card-off text-primary">&ensp;(<%= item.offer %>% OFF)</span></p>
+         <% } else{ %>
+            <p class="dress-card-para mt-1"><span class="dress-card-price fs-5"> ₹ <%=item.price %>&ensp;</span><span
+              class="dress-card-crossed mt-1"></span></p>
+          <% }%>
+          
            <p class="fs-6 fw-bold mt-1 text-primary">Best Selling.  Certified seller.</p>
         </div>
       </div>

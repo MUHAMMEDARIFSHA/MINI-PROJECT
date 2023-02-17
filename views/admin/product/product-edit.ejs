@@ -44,12 +44,16 @@
                 </select>
               </div> 
         <div class="mb-2">
-            <label for="totalStoke" class="form-label fw-bold fs-5 ">Total Stoke</label>
+            <label for="totalStoke" class="form-label fw-bold fs-5 ">Total Stock</label>
             <input type="number" class="form-control w-50 border-2 border-secondary" value="<%= products.totalStoke %>" id="totalStoke" name="totalStoke" placeholder="" required>
           </div>
           <div class="col-md-4">
             <label class="form-label fw-bold fs-5" for="price">Price</label>
             <input type="number" value="<%= products.price %>" name="price" id="price" class="form-control border-2 border-secondary w-50" value="" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold fs-5" for="price">Offer Percentage</label>
+            <input type="number" value="" name="offer" id="offer" min="0" max="95" class="form-control border-2 border-secondary w-50" value="" >
           </div>
               <div class="mb-2">
                 <label for="description" class="form-label fw-bold fs-5">Description</label>
