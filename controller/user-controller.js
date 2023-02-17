@@ -1148,13 +1148,21 @@ editPassword:async(req,res)=>{
       try{
          console.log("delete address");
       const user = await User.find({_id : req.session.user._id})
-      const id = req.params.id
-      const address = await User.find({_id: req.session.user._id,'shippingAddress':id})
-      console.log(address);
-      await User.findOneAndUpdate({ _id: req.session.user._id ,'shippingAddress': id}, { $pull: { shippingAddress: address} })
+       const id = req.body.id
+      console.log(id)
+      const addressId = req.body.addressId
+      console.log(addressId);
+      
+   await User.findOneAndUpdate({ _id: req.session.user._id }, { $pull: { shippingAddress: { '_id': addressId } } })
+      res.json({
+         successStatus:true
+      })
 
       }
       catch(err){
+         res.json({
+            successStatus:false
+         })
  console.log(err);
       }
    }

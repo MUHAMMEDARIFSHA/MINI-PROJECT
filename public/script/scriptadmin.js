@@ -345,25 +345,29 @@ function deleteCoupon(id){
         .catch((err) => console.log(err))           
         
     }
-    function deleteAddress(id){
+
+    function deleteAddress(id,addressId){
         console.log("delete address");
         const url = "http://localhost:4000/delete/address" ;
         const body ={
-            id
+            id,
+            addressId
         }
         fetch(url,{
             method:'PATCH',
             headers :{
                 'Content-Type' : 'application/json'
             },
-            body:JSON.stringify({body})
+            body:JSON.stringify(body)
         }).then((response)=> response.json())
         .then((response)=>{
             if(response.successStatus){
                 window.location.reload()
             }
             else{
-                document.querySelector('#error').innerHTML = "An error occured please try again"
+                // document.querySelector('#error').innerHTML = "An error occured please try again"
             }
         }).catch((err) => console.log(err))
     }
+    
+   

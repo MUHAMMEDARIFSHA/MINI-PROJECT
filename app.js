@@ -22,10 +22,12 @@ collectionName : 'storeSession'
 })
 
 app.use(express.json())
-
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, "./public")));
+
 app.set('view engine', 'ejs');
-app.use(express.static(path.resolve('./public')));
+
+app.use('/uploads',express.static('uploads'))
 const oneWeek = 1000 * 60 * 60 * 24 * 7
 app.use(session({
   secret: "this is my secret code 123@#$^&*",

@@ -16,7 +16,7 @@
             <% let count =1 %>
             <% if(orders.length >0){ %>
               <% orders.forEach(orders=>{ %>
-               <% orders.items.forEach(item =>{ %>
+              
 
           <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-4">
@@ -26,9 +26,10 @@
               <div class="card shadow-0 border mb-4">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 fw-bold"><%=count++ %></p>
+                    <div class="col-md- text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 fs-5 fw-bold"><%=count++ %></p>
                     </div>
+                    <% orders.items.forEach(item =>{ %>
                     <div class="col-md-2">
                       <img src="/<%= item.image %>"
                         class="img-fluid" alt="Phone">
@@ -39,26 +40,32 @@
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small fw-bold"><%=item.color %></p>
                     </div>
-                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small fw-bold"><%=item.size %></p>
                     </div>
-                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small fw-bold">Qty:<%=item.quantity %> </p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small fw-bold">₹ <%=item.price * item.quantity %></p>
                     </div>
+                    
+                    <%   }) %>
+                    <div class="col-md-8 text-center d-flex justify-content-end align-items-center">
+                      <button class="btn btn-secondary fw-bold mb-4">View Details</button>
+                    </div>
+                   
                     <% if(orders.cancelled){ %>
-                    <div class="col-md-1 text-center text-danger d-flex justify-content-center align-items-center">
-                      <p class="text-danger mb-0 small fw-bold">Cancelled</p>
+                    <div class="col-md-4 text-center text-danger d-flex justify-content-center align-items-center">
+                      <p class="text-danger mb-0 small fw-bold mb-4">Cancelled</p>
                     </div>
                   <% } else{ %>
-                    <div class="col-md-1 text-center text-danger d-flex justify-content-center align-items-center">
-                    <button class="btn btn-danger border-2 fw-bold" data-bs-toggle="modal"
+                    <div class="col-md-4 text-center text-danger d-flex justify-content-center align-items-center">
+                    <button class="btn btn-danger border-2 fw-bold mb-4" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop<%= count %>">Cancel</button>
                    </div>
                  <% } %>
-
+                
                  <div class="modal fade" id="staticBackdrop<%= count %>" data-bs-backdrop="static"
                   data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                   aria-hidden="true">
@@ -88,7 +95,7 @@
                     
                   </div>
                   <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
-                  <div class="row d-flex align-items-center">
+                  <!-- <div class="row d-flex align-items-center">
                     <div class="col-md-2">
                       <p class="text-muted mb-0 small">Track Order</p>
                     </div>
@@ -103,11 +110,11 @@
                         <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
-              <%   }) %>
+             
               <%  }) %>
               <% } %>
   
