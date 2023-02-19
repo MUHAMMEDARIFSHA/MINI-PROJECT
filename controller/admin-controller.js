@@ -462,32 +462,3 @@ module.exports = {
 
 
 
-
-// {
-//     $lookup: {
-//       from: "customers",
-//       localField: "customerId",
-//       foreignField: "_id",
-//       as: "customer"
-//     }
-//   },
-//   {
-//     $unwind: "$customer"
-//   },
-//   {
-//     $project: {
-//       _id: 1,
-//       address: 1,
-//       totalAmount: 1,
-//       paymentMethod: 1,
-//       paymentVerified: 1,
-//       orderStatus: 1,
-//       cancelled: 1,
-//       return: 1,
-//       items: 1,
-//       createdAt: 1,
-//       updatedAt: 1,
-//       "customer.name": 1
-//     }
-//   }
-// ]);

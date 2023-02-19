@@ -65,8 +65,9 @@
 
 
                                   <div class="form-outline">
-                                    <input id="quantity" min="1" name="quantity" value="<%= item.quantity %>"
-                                      type="number" class="form-control" />
+                                    <!-- <input id="quantity" min="1" name="quantity" value="<%= item.quantity %>"
+                                      type="number" class="form-control" /> -->
+                                      <div><p id="quantity" min="1" name="quantity" class="form-control fw-bold m-0"><%=item.quantity%></p></div>
                                     <label class="form-label" for="form1">Quantity</label>
                                   </div>
                                 </div>
@@ -181,11 +182,11 @@
                     </ul>
                     <h5></h5>
                     <button type="submit" formaction=" /payment/cod/<%=discount.discount %>"
-                      class="btn btn-secondary btn-lg btn-block text-dark">
+                      class="btn btn-outline-secondary fw-bold btn-md btn-block text-dark w-100 mb-3 ">
                       CASH ON DELIVERY
                     </button>
                     
-                    <button type="button" class="btn btn-secondary btn-lg btn-block text-dark" id="pay"
+                    <button type="button" class="btn btn-outline-secondary fw-bold btn-md btn-block text-dark w-100" id="pay"
                       onclick="Payment(this.id,'<%= Math.round( discount.discount) %>')">
                       Razorpay
                     </button>

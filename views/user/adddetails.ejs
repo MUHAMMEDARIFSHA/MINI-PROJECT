@@ -46,7 +46,7 @@
                       <tr>
                         <th scope="row"><%=count++%></th>
                         <td class="fw-bold text-start"><%= item.address %>,<%= item.city %><br><%= item.state %>,<%= item.pincode %></td>
-                <td> <button type="button" class="btn btn-danger" id="<%= count%>"
+                <td> <button type="button" class="btn btn-outline-danger btn-sm" id="<%= count%>"
                     onclick="deleteAddress(this.id,'<%=item._id %>')"data-url="<%=item._id %>"> Delete </button>
                 </td>
                         

@@ -29,7 +29,8 @@
           <h4 class="dress-card-title mt-1"><%= item.productname %></h4>
           <p class="dress-card-para"></p>
           <% if (item.offer>0){ %>
-            <p class="dress-card-para mt-1"><span class="dress-card-price fs-5"> ₹ <%= Math.round (item.price-(item.price *(item.offer/100))) %>&ensp;</span><span
+            
+            <p class="dress-card-para mt-1"><span class="fw-bold fs-4">  <Del class="text-danger"> ₹ <%= item.price%></Del></span><span class="dress-card-price fs-4"> ₹ <%= Math.round (item.price-(item.price *(item.offer/100))) %>&ensp;</span><span
               class="dress-card-crossed mt-1"></span><span class="dress-card-off text-primary">&ensp;(<%= item.offer %>% OFF)</span></p>
          <% } else{ %>
             <p class="dress-card-para mt-1"><span class="dress-card-price fs-5"> ₹ <%=item.price %>&ensp;</span><span

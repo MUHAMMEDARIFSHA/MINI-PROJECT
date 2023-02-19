@@ -45,16 +45,16 @@ router.get('/coupon',session.isLogged,adminControls.getCoupon)
 
 router.get('/order-details',session.isLogged,adminControls.getOrderDetails)
 
-router.get('/sale-details',adminControls.getSalesDetails)
+router.get('/sale-details',session.isLogged, adminControls.getSalesDetails)
 
- router.get('/sales-report/pdf',adminControls. salesReportPdf)
+ router.get('/sales-report/pdf',session.isLogged, adminControls. salesReportPdf)
 
-router.post('/adminlogin',adminControls.redirectAdminhome)
+router.post('/adminlogin',session.isLogged, adminControls.redirectAdminhome)
 
-router.post('/categories/add',adminControls.addCategory)
+router.post('/categories/add',session.isLogged, adminControls.addCategory)
 
-router.post('/coupon/add',adminControls.addCoupon)
+router.post('/coupon/add',session.isLogged, adminControls.addCoupon)
 
-router.post('/products/addproducts',upload.fields([{ name:'image',maxCount:1}, {name:'image2',maxCount:1},{name:'image3',maxCount:1}]), adminControls.addProducts)
+router.post('/products/addproducts',session.isLogged, upload.fields([{ name:'image',maxCount:1}, {name:'image2',maxCount:1},{name:'image3',maxCount:1}]), adminControls.addProducts)
 
 module.exports = router
