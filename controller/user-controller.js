@@ -6,6 +6,7 @@ const Products = require('../models/products')
 const Orders = require('../models/order')
 const Razorpay = require ('razorpay')
 const Payments =  require('../models/payment')
+const Categories = require('../models/category')
 const crypto = require('crypto')
 const { log } = require('util')
 const Coupons = require('../models/coupon')
@@ -635,6 +636,93 @@ editPassword:async(req,res)=>{
 
      
    },
+   getViewOrderDetails:async(req,res)=>{
+      const orderId = req.session.orderId
+      const product= await Orders.find({_id : orderId}).populate('customerId')
+      console.log(product+"the details of order")
+      req.session.orderId =""
+  return res.render('user/order-product',{product})
+   },
+
+   viewOrderDetails:async(req,res)=>{
+      const id =  req.body.id
+      console.log(id);
+     const product= await Orders.find({_id : id})
+     console.log(product);
+      req.session.orderId = id
+      return res.json({
+         successStatus: true,
+         product,
+         redirect: '/user/order-product'
+     })
+
+
+   },
+
+   getShop:async(req,res)=>{
+      try{
+      console.log("getdhop");
+      let searchWord
+      let products
+      let user
+      let category
+      if (req.session.searchWord.length>0){
+   console.log("getshop");
+   user = await User.find({ isBlocked:false})
+    category = await Categories.find({isDeleted:false})
+           searchWord = req.session.searchWord
+           req.session.searchWord = ''
+           products = await Products.aggregate([
+             {
+               $lookup: {
+                 from: 'categories',
+                 localField: 'categoryId',
+                 foreignField: '_id',
+                 as: 'categoryId'
+               }
+             },
+             {
+               $unwind: '$categoryId'
+             },
+             
+             {
+               $match: {
+                 'isDeleted': false
+               }
+             },
+             {
+               $match: {
+                 $or: [
+                   {productname: new RegExp(searchWord, 'i')},
+                   {'color': new RegExp(searchWord, 'i')},
+                   {'categoryId.categoryname': new RegExp(searchWord, 'i')}
+                 ]
+               }
+             }
+           ])
+      }
+      else{
+                 console.log("normalshop");
+       products = await Products.find({ isDeleted: false }).populate('categoryId')
+      console.log(products);
+      category = await Categories.find({isDeleted:false})
+      console.log(category);
+    user = await User.find({ isBlocked:false})
+     
+      }
+      return res.render('user/shop', { products,user,category})
+   }
+   catch(err){
+      console.log("err")
+   }
+   },
+   Search:(req,res)=>{
+   
+         const searchWord = req.query.search.replace(/[^a-zA-Z0-9 ]/g, '')
+         req.session.searchWord = searchWord
+         res.redirect('/shop')
+       },
+   
 
 }
 

@@ -49,7 +49,7 @@ router.get('/sale-details',session.isLogged, adminControls.getSalesDetails)
 
  router.get('/sales-report/pdf',session.isLogged, adminControls. salesReportPdf)
 
-router.post('/adminlogin',session.isLogged, adminControls.redirectAdminhome)
+router.post('/adminlogin', adminControls.redirectAdminhome)
 
 router.post('/categories/add',session.isLogged, adminControls.addCategory)
 

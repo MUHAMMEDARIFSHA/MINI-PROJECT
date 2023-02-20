@@ -369,5 +369,29 @@ function deleteCoupon(id){
             }
         }).catch((err) => console.log(err))
     }
+
+    function viewOrderDetails(id,count){
+        console.log("product details");
+        const url = "http://localhost:4000/orders/product/details" ;
+        const body ={
+            id,
+            count
+        }
+        fetch(url,{
+            method:'POST',
+            headers :{
+                'Content-Type' : 'application/json'
+            },
+            body:JSON.stringify(body)
+        }).then((response)=> response.json())
+        .then((response)=>{
+            if(response.successStatus){
+                window.location.href = response.redirect
+            }
+            else{
+                // document.querySelector('#error').innerHTML = "An error occured please try again"
+            }
+        }).catch((err) => console.log(err))
+    }
     
    

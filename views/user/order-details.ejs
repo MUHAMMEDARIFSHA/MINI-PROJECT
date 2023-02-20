@@ -52,7 +52,7 @@
                     
                     <%   }) %>
                     <div class="col-md-8 text-center d-flex justify-content-end align-items-center">
-                      <button class="btn btn-secondary fw-bold mb-4">View Details</button>
+                      <button class="btn btn-secondary fw-bold mb-4" onclick="viewOrderDetails('<%=orders.id%>','<%= count %>')">View Details</button>
                     </div>
                    
                     <% if(orders.cancelled){ %>
