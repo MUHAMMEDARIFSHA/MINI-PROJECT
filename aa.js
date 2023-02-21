@@ -148,3 +148,19 @@
 
 </body>
 </html>
+
+
+
+
+
+<% orders.items.forEach(item=>{ %>
+  <div class="col- coloum fw-bold   text-center d-flex justify-content-center align-items-center ">
+   
+      <p>
+        <%=item.productName %>
+      </p><br><br><br><br><br><br>
+  
+  </div>
+  <% })%>
+
+  

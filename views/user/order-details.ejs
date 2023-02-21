@@ -52,10 +52,17 @@
                     
                     <%   }) %>
                     <div class="col-md-8 text-center d-flex justify-content-end align-items-center">
-                      <button class="btn btn-secondary fw-bold mb-4" onclick="viewOrderDetails('<%=orders.id%>','<%= count %>')">View Details</button>
+                      <button class="btn btn-secondary mb-4 fw-bold "  data-bs-toggle="modal"
+                      data-bs-target="#modal1<%=count %>">View details</button>
                     </div>
                    
-                    <% if(orders.cancelled){ %>
+
+                   <% if(orders.orderStatus==="Delivered"){ %>
+                      <div class="col-md-4 text-center text-success d-flex justify-content-center align-items-center">
+                        <p class="text-success fs-4 mb-0 small fw-bold mb-4">Delivered</p>
+                      </div>
+                    <% }
+                    else if(orders.cancelled){ %>
                     <div class="col-md-4 text-center text-danger d-flex justify-content-center align-items-center">
                       <p class="text-danger mb-0 small fw-bold mb-4">Cancelled</p>
                     </div>
@@ -66,6 +73,85 @@
                    </div>
                  <% } %>
                 
+                 <div class="modal fade  modal-xl scrollable" id="modal1<%=count %>" data-bs-backdrop="static"
+                  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-4 " id="staticBackdropLabel">PRODUCT DETAILS</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                      </div>
+                      <!-- <div class="modal-body fw-bold">
+                        User Name : 
+                      </div>
+    -->
+                      <!-- modal showing the details of products -->
+
+                      <div class="container" style="display: table;">
+                        
+                        <div class="modal-body col-md-12 ">
+                          <div class="row">
+                            
+                            
+                          <div class="col-md-2 fw-bold  text-center d-flex justify-content-center align-items-center">
+
+                        
+                              <p>PAYMENT METHOD:<BR><br>
+                                <%=orders.paymentMethod %>
+                              </p>
+                          
+                          </div>
+                          <div class="col-md-3 fw-bold  text-center d-flex justify-content-center align-items-center">
+                            <% orders.address.forEach(item=>{ %>
+                              <p>ADDRESS:<BR> <%=item.address %>,
+                              <%=item.city %><br>
+                              <%=item.state%>,
+                              <%=item.pincode %>
+                              </p>
+                              <% })%>
+                          </div>
+
+                          <div class="col-md-2 fw-bold  text-center d-flex justify-content-center align-items-center">
+                            
+                              <p>ORDER STATUS:<BR><br>
+                                <%= orders.orderStatus%>
+                              </p>
+                      
+                          </div>
+
+                          <div class="col-md-2 fw-bold text-center d-flex justify-content-center align-items-center">
+                          
+                              <p>
+                              TOTAL AMOUNT:<BR><br>
+                                ₹ <%= orders.totalAmount %>
+                              </p>
+                        
+                          </div>
+
+                          <div class="col-md-2 fw-bold text-center d-flex justify-content-center align-items-center">
+                            
+                              <p>CONTACT NUMBER:<br><br>
+                                <%= orders.number %>
+                            
+                              </p>
+                              
+                          </div>
+
+
+                         
+                        </div>  
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                 <!-- modal showing the details of order cancel -->
                  <div class="modal fade" id="staticBackdrop<%= count %>" data-bs-backdrop="static"
                   data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                   aria-hidden="true">
