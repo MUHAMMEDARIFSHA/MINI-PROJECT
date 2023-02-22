@@ -5,7 +5,7 @@
   async function Payment(buttonid,discount,offer){
     const button = document.getElementById(buttonid)
     const address = document.querySelector('input[name = "address"]:checked').value
-    const url = "payment/razorpay"
+    const url = "/payment/razorpay"
     console.log(discount)
     try {
         const response = await fetch(url, {

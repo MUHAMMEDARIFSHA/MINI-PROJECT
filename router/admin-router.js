@@ -45,9 +45,9 @@ router.get('/coupon',session.isLogged,adminControls.getCoupon)
 
 router.get('/order-details',session.isLogged,adminControls.getOrderDetails)
 
-router.get('/sale-details',session.isLogged, adminControls.getSalesDetails)
+router.get('/sale-details', adminControls.getSalesDetails)
 
- router.get('/sales-report/pdf',session.isLogged, adminControls. salesReportPdf)
+ router.get('/sales-report/pdf', adminControls. salesReportPdf)
 
 router.post('/adminlogin', adminControls.redirectAdminhome)
 

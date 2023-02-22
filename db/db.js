@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', true)
-const mongoDB = "mongodb://127.0.0.1:27017/ecommerce";
+const mongoDB = process.env.URL ;
 
  mongoose.connect(mongoDB, (err) => {
         if (err) {

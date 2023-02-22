@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 function blockUser(id) {
     const data = document.getElementById(id).dataset.url;
-    const url = "http://localhost:4000/admin/userdata/" + data;
+    const url = "/admin/userdata/" + data;
     const body = {
         id: data
     }
@@ -26,7 +26,7 @@ function blockUser(id) {
 
 function deleteCategory(id){
     const data = document.getElementById(id).dataset.url;
-    const url = "http://localhost:4000/admin/categories/" +data;
+    const url = "/admin/categories/" +data;
     const body ={
         id:data
     }
@@ -49,7 +49,7 @@ function deleteCategory(id){
 
 function deleteProduct(id){
     const data = document.getElementById(id).dataset.url;
-    const url = "http://localhost:4000/admin/product/product-details/" +data;
+    const url = "/admin/product/product-details/" +data;
     const body ={
         id:data
     }
@@ -71,7 +71,7 @@ function deleteProduct(id){
 }
 
 function addtoCart(id){
-    const url = "http://localhost:4000/cart/add";
+    const url = "/cart/add";
     const body ={
         id
     }
@@ -94,7 +94,7 @@ function addtoCart(id){
 }
 
 function removeCartItem(id){
-    const url = "http://localhost:4000/cart/remove";
+    const url = "/cart/remove";
     const body ={
         id
     }
@@ -116,7 +116,7 @@ function removeCartItem(id){
     }).catch((err) => console.log(err))
 }
 function removeWishItem(id){
-    const url = "http://localhost:4000/wish/remove";
+    const url = "/wish/remove";
     const body ={
         id
     }
@@ -139,7 +139,7 @@ function removeWishItem(id){
 }
 
 function changeQuantity(id,amount,count){
-    const url = "http://localhost:4000/cart/change";
+    const url = "/cart/change";
     const body ={
         id,
         amount,
@@ -175,7 +175,7 @@ function changeQuantity(id,amount,count){
 
 }
 function cancelOrder(id){
-    const url = "http://localhost:4000/admin/orders/cancel";
+    const url = "/admin/orders/cancel";
     const body ={
         id
     }
@@ -198,7 +198,7 @@ function cancelOrder(id){
 }
 
 function orderCancel(id){
-    const url = "http://localhost:4000/orders/cancel";
+    const url = "/orders/cancel";
     const body ={
         id
     }
@@ -222,7 +222,7 @@ function orderCancel(id){
 
 function changeStatus(id,count){
        
-    const url = "http://localhost:4000/admin/orders/change" ;
+    const url = "/admin/orders/change" ;
     const value = document.getElementById(count).value;
     console.log(id)
     console.log(value);
@@ -247,7 +247,7 @@ function changeStatus(id,count){
     }).catch((err) => console.log(err))
 }
 function addtoWishlist(id){
-    const url = "http://localhost:4000/wishlist/add";
+    const url = "/wishlist/add";
     const body ={
         id
     }
@@ -270,7 +270,7 @@ function addtoWishlist(id){
 }
 
 function addtoCartfromWish(id){
-    const url = "http://localhost:4000/wishlist/cart/add";
+    const url = "/wishlist/cart/add";
     const body ={
         id
     }
@@ -294,7 +294,7 @@ function addtoCartfromWish(id){
 
 function deleteCoupon(id){
     const data = document.getElementById(id).dataset.url;
-    const url = "http://localhost:4000/admin/coupons/" +data;
+    const url = "/admin/coupons/" +data;
     const body ={
         id:data
     }
@@ -348,7 +348,7 @@ function deleteCoupon(id){
 
     function deleteAddress(id,addressId){
         console.log("delete address");
-        const url = "http://localhost:4000/delete/address" ;
+        const url = "/delete/address" ;
         const body ={
             id,
             addressId
@@ -372,7 +372,7 @@ function deleteCoupon(id){
 
     function viewOrderDetails(id,count){
         console.log("product details");
-        const url = "http://localhost:4000/orders/product/details" ;
+        const url = "/orders/product/details" ;
         const body ={
             id,
             count

@@ -11,6 +11,7 @@ const crypto = require('crypto')
 const { log } = require('util')
 const Coupons = require('../models/coupon')
 const paypal = require('@paypal/checkout-server-sdk')
+const { default: mongoose } = require('mongoose')
 const Environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID,process.env.PAYPAL_CLIENT_SECRET)
 const paypalClient = new paypal.core.PayPalHttpClient(Environment)
 
@@ -47,9 +48,10 @@ module.exports = {
       return res.render('landingpage', { products })
    },
    getHomepage: async (req, res) => {
-      const products = await Products.find({ isDeleted: false })
+      const products = await Products.find({ isDeleted: false }).populate('categoryId')
       const user = await User.find({ isBlocked:false})
-      return res.render('userhome', { products,user})
+      category = await Categories.find({isDeleted:false})
+      return res.render('userhome', { products,user,category})
    },
    getOtp: (req, res) => {
       return res.render('otp')
@@ -103,9 +105,8 @@ module.exports = {
          else {
             const check = await message.check(otp, req.session.storeuser.number)
             if (check.status == "approved") {
-               storeuser.password = await bcrypt.hash(storeuser.password, 10)
+            
                await storeuser.save()
-
                req.session.message = ""
                res.redirect('./login',)
             }
@@ -160,7 +161,7 @@ module.exports = {
    },
 
    getUserlogout: (req, res) => {
-      req.session.user = null
+      req.session.user = ""
       res.redirect('/login')
    },
    getProductdetails: (req, res) => {
@@ -661,13 +662,13 @@ editPassword:async(req,res)=>{
 
    getShop:async(req,res)=>{
       try{
-      console.log("getdhop");
+      
       let searchWord
       let products
       let user
-      let category
+      let category=[]
       if (req.session.searchWord.length>0){
-   console.log("getshop");
+
    user = await User.find({ isBlocked:false})
     category = await Categories.find({isDeleted:false})
            searchWord = req.session.searchWord
@@ -704,16 +705,55 @@ editPassword:async(req,res)=>{
       else{
                  console.log("normalshop");
        products = await Products.find({ isDeleted: false }).populate('categoryId')
-      console.log(products);
+      
       category = await Categories.find({isDeleted:false})
-      console.log(category);
+
     user = await User.find({ isBlocked:false})
      
       }
+      
+      const categories =await Categories.find({isDeleted : false})
+      const categoryArray = []
+      categories.forEach(item => {
+        categoryArray.push(item._id)
+        })
+        let from = req.session.from || 0
+        let to = req.session.to || 100000
+      if(req.session.productCategory){
+         console.log("category filter")
+            req.session.productCategory.forEach(item=>{
+               category.push(mongoose.Types.ObjectId(item))
+            })
+      }
+    
+if(req.session.from || req.session.to || req.session.productCategory){
+   req.session.from =""
+   req.session.to=""
+   req.session.productCategory= ""
+   products = await Products.aggregate([
+      
+      {
+        $match: {
+          'isDeleted': false,
+          $and:[
+            {'price': {$gte: parseInt(from)}},
+            {'price': {$lte: parseInt(to)}},
+          ],
+          categoryId: {$in : category}
+        }
+      },
+      {
+        $sort: {
+          categoryId: 1
+        }
+      }
+    ])
+}
+
       return res.render('user/shop', { products,user,category})
    }
    catch(err){
-      console.log("err")
+      console.log(err)
    }
    },
    Search:(req,res)=>{
@@ -722,6 +762,16 @@ editPassword:async(req,res)=>{
          req.session.searchWord = searchWord
          res.redirect('/shop')
        },
+
+       filterProducts:(req,res)=>{
+         req.session.from = req.query.from
+         req.session.to = req.query.to
+         console.log(req.session.to,req.session.from);
+         req.session.productCategory = req.query.category
+       
+         console.log(req.session.productCategory + "product category");
+         res.redirect('/shop')
+       }
    
 
 }
