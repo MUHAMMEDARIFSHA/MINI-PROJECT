@@ -7,7 +7,6 @@ const { notLogged } = require('../middleware/adminsession')
 const session = require('../middleware/adminsession')
 const {upload}= require('../db/multer')
 
-
 router.get('/',session.notLogged, adminControls.getAdminlogin)
 
 router.get('/adminlogin',session.isLogged, adminControls.getAdminhome)

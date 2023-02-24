@@ -36,6 +36,7 @@ router.get('/user/order-product',session.isLogged,userControls.getViewOrderDetai
 router.get('/shop',userControls.getShop)
 router.get('/search',userControls.Search)
 router.get('/products/filter',session.isLogged,userControls.filterProducts)
+router.get('/shop/next',session.isLogged,userControls.changePage)
 
 router.post('/register',session.notLogged, userControls.saveUser)
 router.post('/otp',session.notLogged, userControls.addUser)

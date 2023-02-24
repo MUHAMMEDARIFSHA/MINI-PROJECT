@@ -662,11 +662,35 @@ editPassword:async(req,res)=>{
 
    getShop:async(req,res)=>{
       try{
-      
-      let searchWord
+       let searchWord
       let products
       let user
-      let category=[]
+      let category=await Categories.find({isDeleted :false})
+      let categoryForfilter =[]
+      let pages
+      perPage = 4
+      let page = req.session.page
+      totalCount =  await Products.aggregate(
+         [
+            {
+              $match:
+                
+                {
+                  isDeleted: false,
+                },
+            },
+            {
+              $count:
+                "productname",
+            },
+          ])
+          console.log(totalCount[0].productname);
+       
+  pages = Math.ceil((totalCount[0].productname)/perPage)
+     
+  let from = req.session.from || 0
+  let to = req.session.to || 100000
+  console.log(from,to +"in filter")
       if (req.session.searchWord.length>0){
 
    user = await User.find({ isBlocked:false})
@@ -700,36 +724,42 @@ editPassword:async(req,res)=>{
                  ]
                }
              }
-           ])
+           ]).skip((page-1)*perPage).limit(perPage)
       }
-      else{
-                 console.log("normalshop");
-       products = await Products.find({ isDeleted: false }).populate('categoryId')
       
-      category = await Categories.find({isDeleted:false})
-
-    user = await User.find({ isBlocked:false})
+      
      
-      }
-      
-      const categories =await Categories.find({isDeleted : false})
-      const categoryArray = []
-      categories.forEach(item => {
-        categoryArray.push(item._id)
-        })
-        let from = req.session.from || 0
-        let to = req.session.to || 100000
-      if(req.session.productCategory){
+        
+       
+      else if(req.session.productCategory){ 
+         
+         
          console.log("category filter")
             req.session.productCategory.forEach(item=>{
-               category.push(mongoose.Types.ObjectId(item))
+             categoryForfilter.push(mongoose.Types.ObjectId(item))
+               console.log(category +"after filter");
             })
+            req.session.productCategory = null
+            products= await Products.aggregate([
+               {$match:{
+                  'isDeleted' : false,
+                  categoryId: {$in : categoryForfilter}
+               }},
+               {
+                  $sort: {
+                    categoryId: 1
+                  }
+                }
+            
+            ]).skip((page-1)*perPage).limit(perPage)
       }
+   
     
-if(req.session.from || req.session.to || req.session.productCategory){
-   req.session.from =""
-   req.session.to=""
-   req.session.productCategory= ""
+else if (req.session.from || req.session.to){
+console.log("price filter");
+   req.session.from = null
+   req.session.to= null
+   req.session.productCategory= null
    products = await Products.aggregate([
       
       {
@@ -738,8 +768,8 @@ if(req.session.from || req.session.to || req.session.productCategory){
           $and:[
             {'price': {$gte: parseInt(from)}},
             {'price': {$lte: parseInt(to)}},
-          ],
-          categoryId: {$in : category}
+          ]
+         
         }
       },
       {
@@ -747,15 +777,28 @@ if(req.session.from || req.session.to || req.session.productCategory){
           categoryId: 1
         }
       }
-    ])
+    ]).skip((page-1)*perPage).limit(perPage)
+}
+else{
+   console.log("normalshop");
+products = await Products.find({ isDeleted: false }).populate('categoryId').skip((page-1)*perPage).limit(perPage)
+
+category = await Categories.find({isDeleted:false})
+
+user = await User.find({ isBlocked:false})
 }
 
-      return res.render('user/shop', { products,user,category})
+
+      return res.render('user/shop', { products,user,category,pages})
    }
    catch(err){
       console.log(err)
    }
    },
+
+
+
+
    Search:(req,res)=>{
    
          const searchWord = req.query.search.replace(/[^a-zA-Z0-9 ]/g, '')
@@ -771,6 +814,42 @@ if(req.session.from || req.session.to || req.session.productCategory){
        
          console.log(req.session.productCategory + "product category");
          res.redirect('/shop')
+       },
+
+
+       changePage: async(req,res)=>{
+         const user = req.session.user
+         const category = await Categories.find({isDeleted : false})
+         const page = req.query.page
+         console.log(page+"pagination");
+         req.session.page=page
+         console.log(req.session.page+"p");
+         let products
+         let pages
+         if(req.session.page){
+            const page = req.session.page
+            const perPage = 4
+         products = await Products.find({isDeleted : false}).skip((page-1)*perPage).limit(perPage)
+            totalCount =  await Products.aggregate(
+               [
+                  {
+                    $match:
+                      
+                      {
+                        isDeleted: false,
+                      },
+                  },
+                  {
+                    $count:
+                      "productname",
+                  },
+                ])
+                console.log(totalCount[0].productname);
+             
+        pages = Math.ceil((totalCount[0].productname)/perPage)
+         }
+         
+      return res.render('user/shop', { products,user,category,pages})
        }
    
 
