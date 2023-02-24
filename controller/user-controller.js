@@ -669,7 +669,7 @@ editPassword:async(req,res)=>{
       let categoryForfilter =[]
       let pages
       perPage = 4
-      let page = req.session.page
+      let page = req.session.page || 1
       totalCount =  await Products.aggregate(
          [
             {
