@@ -8,7 +8,7 @@
     <%-include('./partials/top-navbar')%>
 
 
-      <div class="container-fluid mx-5">
+      <div class="container-fluid mx-5 my-5 ">
         <div class="row mt-5">
           <div class="col-sm-6 text-black">
               <span class="text-danger fw-bold fs-5"><%= message %></span>
@@ -23,14 +23,16 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password " name="password">
               </div>
-              <p class="mb-2 "><a class="forget" href="/forgot-password">forger password?</a></p>
+              <p class="mb-2 "><a class="forget" href="/forgot-password">forgot password?</a></p>
               <div class="mb-4 d-flex justify-content-center  btn-lg">
-                <button class=" btn login-btn m-auto px-5 py-1 rounded-pill fs-3" type="submit" name="submit"
+                <button class=" btn login-btn mt-3 px-5 py-1 rounded-pill fs-3 " type="submit" name="submit"
                   id="submit">Login</button>
               </div>
 
               <p>New to here? <a href="/register" class="linkinfo text-decoration-none fs-4"> Sign up</a></p>
             </form>
+            <div></div>
+            <div></div>
 
           </div>
         </div>
