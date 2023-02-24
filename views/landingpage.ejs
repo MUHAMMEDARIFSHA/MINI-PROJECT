@@ -3,12 +3,34 @@
 <%-include('./partials/head')%>
 
   <body>
-    <%-include ('./partials/top-navbar') %>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <div class="container-fluid">
+          <a class="brand" href="/">PitBull</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  </ul>
+                  <form class="d-flex px-5 " role="search">
+                    <input  placeholder="Search..." class="search text-dark fw-bold" name="text" type="text">
+                    <button class="btn  " type="submit"><iconify-icon class="fs-3 " icon="ic:round-search"></iconify-icon></button>
+                  </form>
+              <ul class="navbar-nav pt-2">
+                <li ><a class="fs-5 fw-bold  text-dark text-decoration-none "href="/login">Sign IN/</a><a class="fs-5 fw-bold   text-dark text-decoration-none "href="/register">Sign UP</a></li>
+                  <li ><a class="fs-5 fw-bold mx-3  text-dark text-decoration-none "href="/shop"> SHOP </a></li>
+                  <li><a href=""class="text-decoration-none fs-5 fw-bold text-dark mx-3" >WISHLIST</a></li>
+                 <li><a href="/cart"class="text-decoration-none fs-5 fw-bold text-dark" >CART<iconify-icon class="fs-5 text-dark" icon="ic:round-shopping-cart"></iconify-icon></a></li>
+                  
+              </ul>
+          </div>
+      </div>
+    </nav>
     
    <%-include('./partials/home-extra') %>
 
 
-
+<!-- 
 <div id="carouselExample" class="carousel slide">
   <div class="carousel-inner mt-3">
     <div class="carousel-item active">
@@ -29,7 +51,7 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
-</div>
+</div> -->
 
 
     <div class="container">

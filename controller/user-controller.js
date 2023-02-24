@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-useless-escape */
-/* eslint-disable eqeqeq */
+
 
 const User = require('../models/user')
 const message = require('../twilio')

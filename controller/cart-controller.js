@@ -86,11 +86,16 @@ module.exports = {
     try {
       if (pro.length > 0) {
         await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': +1, cartTotal: Math.round(amount) } })
-      } else {
+      } else if(product.totalStoke<=0){
+        res.json({
+          successStatus: false})
+
+      }
+      else {
         const user = await User.findById(req.session.user._id)
         console.log(user)
         const product = await Products.findById(productId)
-        console.log(product)
+        
         let total
         if (product.offer > 0) {
           total = Math.round(product.price - (product.price * product.offer / 100))
