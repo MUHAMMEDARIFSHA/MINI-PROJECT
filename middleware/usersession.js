@@ -3,7 +3,7 @@ const User = require('../models/user')
 
 module.exports = {
   isLogged: async (req, res, next) => {
-    console.log('hi')
+    
     if (req.session.user) {
       const user = await User.find({ _id: req.session.user._id })
       console.log(user)

@@ -380,7 +380,7 @@ module.exports = {
       const discountprice = total - discount
 
       await Coupons.findOneAndUpdate({ coupon: req.body.coupon }, { $push: { users: req.session.user._id } })
-      console.log('sucess')
+  
       res.json({
         successStatus: true,
         discountprice,
@@ -461,7 +461,7 @@ module.exports = {
   },
   deleteAddress: async (req, res) => {
     try {
-      console.log('delete address')
+  
 
       const id = req.body.id
       console.log(id)
@@ -512,11 +512,12 @@ module.exports = {
 
   getShop: async (req, res) => {
     try {
+      console.log("get shop")
       let searchWord
       let products
       let user
       let category = await Categories.find({ isDeleted: false })
-      const categoryForfilter = []
+      let categoryForfilter = []
 
       const perPage = 4
       const page = req.session.page || 1
@@ -540,7 +541,7 @@ module.exports = {
 
       const from = req.session.from || 0
       const to = req.session.to || 100000
-      console.log(from, to + 'in filter')
+  
       if (req.session.searchWord.length > 0) {
         user = await User.find({ isBlocked: false })
         category = await Categories.find({ isDeleted: false })
@@ -575,10 +576,10 @@ module.exports = {
           }
         ]).skip((page - 1) * perPage).limit(perPage)
       } else if (req.session.productCategory) {
-        console.log('category filter')
+      
         req.session.productCategory.forEach(item => {
           categoryForfilter.push(mongoose.Types.ObjectId(item))
-          console.log(category + 'after filter')
+    
         })
         req.session.productCategory = null
         products = await Products.aggregate([
@@ -595,8 +596,9 @@ module.exports = {
           }
 
         ]).skip((page - 1) * perPage).limit(perPage)
+        
       } else if (req.session.from || req.session.to) {
-        console.log('price filter')
+  
         req.session.from = null
         req.session.to = null
         req.session.productCategory = null
