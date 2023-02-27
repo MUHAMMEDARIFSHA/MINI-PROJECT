@@ -189,11 +189,21 @@ module.exports = {
       user.cart.forEach(item => {
         if (item.productId == productId) {
           quantity = item.quantity
+        
           if (item.quantity == 1 && req.body.amount < 0) {
             flag = false
           }
+          if(quantity <=0){
+          
+          }
         }
       })
+      if(quantity <=0){
+        await User.findOneAndUpdate({ _id: user._id }, { $pull: { cart: { productId } } })
+      return res.json({
+          successStatus :false
+        })
+      }
       if (totalStoke - quantity <= 0 && req.body.amount > 0) {
         return res.json({
           successStatus: false,
@@ -204,7 +214,6 @@ module.exports = {
           offer
         })
       }
-      console.log((user.cartTotal + total) + 'amount')
       const newquantity = req.body.amount
       const count = quantity + req.body.amount
       const firstvalue = user.cartTotal

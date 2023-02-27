@@ -59,7 +59,7 @@
                   </button>
 
                   <div class="form-outline">
-                    <input id="<%= item.productId.id %>" min="1" max="<%=item.productId.totalStoke%>" name="quantity" value="<%= item.quantity %>" type="number" class="form-control" />
+                    <div ><p id="<%= item.productId.id %>" min="1" max="<%=item.productId.totalStoke%>" name="quantity"  type="number" class="form-control"><%= item.quantity %></p> </div>
                     <label class="form-label" for="form1">Quantity</label>
                   </div>
 

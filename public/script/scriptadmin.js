@@ -151,18 +151,24 @@ function changeQuantity (id, amount, count) {
     body: JSON.stringify(body)
   }).then((response) => response.json())
     .then((response) => {
+     
       if (response.successStatus) {
-        document.getElementById(id).value = response.count
+        document.getElementById(id).innerText = response.count
         const total = document.getElementById('totalamount1')
         total.innerText = response.totalamount
         document.getElementById('productprice').innerText = response.totalamount
         document.getElementById(count).innerHTML = ''
+        if(response.quantity){
+          window.location.reload()
+         }
       } else {
         if (response.quantity) {
           if (response.totalStoke === response.quantity) {
             console.log(response.totalStoke, response.quantity)
-            // document.getElementById(totalamount).innerHTML  = response.total
             document.getElementById(count).innerHTML = 'Out of stoke'
+          }
+          if(response.quantity<=0){
+            window.location.reload()  
           }
         }
       }
@@ -375,30 +381,4 @@ function viewOrderDetails (id, count) {
     }).catch((err) => console.log(err))
 }
 
-// function Search (id) {
-//   const url = '/search'
-//   const searchValue = document.getElementById('search').value
-//   console.log(id)
-//   console.log(searchValue +"search value")
-//   const body = {
-//    searchValue
-//   }
-//   fetch(url, {
-//     method: 'get',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify()
-//   }).then((response) => response.json())
-//     .then((response) => {
-//       console.log(searchValue + "inside response1");
-//       if (response.successStatus) {
-//         console.log(searchValue + "inside response");
-//         console.log(searchWord + " search word");
-//         document.getElementById('search').innerHTML = response.searchWord
-        
-//       } else {
-//         document.querySelector('#error').innerHTML = 'An error occured please try again'
-//       }
-//     }).catch((err) => console.log(err))
-// }
+

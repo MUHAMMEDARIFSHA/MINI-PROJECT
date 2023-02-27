@@ -121,11 +121,10 @@ module.exports = {
   },
   redirectHomepage: async (req, res) => {
     const user = await User.find({ email: req.body.email })
-    const datapassword = user[0].password
-
+    
     if (user.length != 0) {
       const password1 = req.body.password
-      const match = await bcrypt.compare(password1, datapassword)
+      const match = await bcrypt.compare(password1, user[0].password)
 
       if (!match) {
         req.session.message = 'password not correct'
@@ -138,7 +137,7 @@ module.exports = {
         return res.redirect('/home')
       }
     } else {
-      req.session.message = 'Invalid User'
+      req.session.message = 'User not found'
       res.redirect('/login')
     }
   },
@@ -710,6 +709,10 @@ module.exports = {
     }
 
     return res.render('user/shop', { products, user, category, pages,searchWord })
+  },
+
+  get404:(req,res)=>{
+    res.render('404')
   }
 
 }
