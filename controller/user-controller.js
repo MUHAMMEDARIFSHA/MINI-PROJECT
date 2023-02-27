@@ -535,7 +535,7 @@ module.exports = {
                 'productname'
           }
         ])
-      console.log(totalCount[0].productname)
+  
 
       const pages = Math.ceil((totalCount[0].productname) / perPage)
 
@@ -546,6 +546,7 @@ module.exports = {
         user = await User.find({ isBlocked: false })
         category = await Categories.find({ isDeleted: false })
         searchWord = req.session.searchWord
+        req.session.searchWordforFilter = req.session.searchWord
         req.session.searchWord = ''
         products = await Products.aggregate([
           {
@@ -573,10 +574,12 @@ module.exports = {
                 { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
               ]
             }
-          }
+          },
+          
+
         ]).skip((page - 1) * perPage).limit(perPage)
       } else if (req.session.productCategory) {
-      
+         searchWord = req.session.searchWordinFilter
         req.session.productCategory.forEach(item => {
           categoryForfilter.push(mongoose.Types.ObjectId(item))
     
@@ -584,8 +587,16 @@ module.exports = {
         req.session.productCategory = null
         products = await Products.aggregate([
           {
+            $unwind: '$categoryId'
+          },
+          {
             $match: {
               isDeleted: false,
+              $or: [
+                { productname: new RegExp(searchWord, 'i') },
+                { color: new RegExp(searchWord, 'i') },
+                { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
+              ],
               categoryId: { $in: categoryForfilter }
             }
           },
@@ -595,18 +606,27 @@ module.exports = {
             }
           }
 
-        ]).skip((page - 1) * perPage).limit(perPage)
+        ]).skip((page-1) * perPage).limit(perPage)
         
       } else if (req.session.from || req.session.to) {
-  
+         searchWord = req.session.searchWordinFilter
         req.session.from = null
         req.session.to = null
         req.session.productCategory = null
         products = await Products.aggregate([
+          {
+            $unwind: '$categoryId'
+          },
 
           {
             $match: {
               isDeleted: false,
+              $or: [
+                { productname: new RegExp(searchWord, 'i') },
+                { color: new RegExp(searchWord, 'i') },
+                { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
+              ],
+              
               $and: [
                 { price: { $gte: parseInt(from) } },
                 { price: { $lte: parseInt(to) } }
@@ -622,14 +642,18 @@ module.exports = {
         ]).skip((page - 1) * perPage).limit(perPage)
       } else {
         console.log('normalshop')
+        req.session.searchWordinFilter = ''
+        req.session.searchWordforFilter = ''
         products = await Products.find({ isDeleted: false }).populate('categoryId').skip((page - 1) * perPage).limit(perPage)
 
         category = await Categories.find({ isDeleted: false })
+        searchWord = ''
+        
 
         user = await User.find({ isBlocked: false })
       }
 
-      return res.render('user/shop', { products, user, category, pages })
+      return res.render('user/shop', { products, user, category, pages,searchWord })
     } catch (err) {
       console.log(err)
     }
@@ -644,6 +668,10 @@ module.exports = {
   filterProducts: (req, res) => {
     req.session.from = req.query.from
     req.session.to = req.query.to
+     const searchWordinFilter = req.session.searchWordforFilter
+    
+    req.session.searchWordinFilter = searchWordinFilter
+    console.log(req.session.searchWordinFilter + "search word in filter");
     console.log(req.session.to, req.session.from)
     req.session.productCategory = req.query.category
 
@@ -654,8 +682,8 @@ module.exports = {
   changePage: async (req, res) => {
     const user = req.session.user
     const category = await Categories.find({ isDeleted: false })
+    searchWord = ''
     const page = req.query.page
-    console.log(page + 'pagination')
     req.session.page = page
     console.log(req.session.page + 'p')
     let products
@@ -668,22 +696,20 @@ module.exports = {
         [
           {
             $match:
-
                       {
                         isDeleted: false
                       }
           },
           {
-            $count:
-                      'productname'
+            $count: 'productname'
           }
         ])
-      console.log(totalCount[0].productname)
+     
 
       pages = Math.ceil((totalCount[0].productname) / perPage)
     }
 
-    return res.render('user/shop', { products, user, category, pages })
+    return res.render('user/shop', { products, user, category, pages,searchWord })
   }
 
 }

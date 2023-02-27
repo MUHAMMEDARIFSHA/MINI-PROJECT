@@ -331,7 +331,7 @@ function addCoupons (buttonid) {
 }
 
 function deleteAddress (id, addressId) {
-  console.log('delete address')
+
   const url = '/delete/address'
   const body = {
     id,
@@ -354,7 +354,6 @@ function deleteAddress (id, addressId) {
 }
 
 function viewOrderDetails (id, count) {
-  console.log('product details')
   const url = '/orders/product/details'
   const body = {
     id,
@@ -375,3 +374,31 @@ function viewOrderDetails (id, count) {
       }
     }).catch((err) => console.log(err))
 }
+
+// function Search (id) {
+//   const url = '/search'
+//   const searchValue = document.getElementById('search').value
+//   console.log(id)
+//   console.log(searchValue +"search value")
+//   const body = {
+//    searchValue
+//   }
+//   fetch(url, {
+//     method: 'get',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify()
+//   }).then((response) => response.json())
+//     .then((response) => {
+//       console.log(searchValue + "inside response1");
+//       if (response.successStatus) {
+//         console.log(searchValue + "inside response");
+//         console.log(searchWord + " search word");
+//         document.getElementById('search').innerHTML = response.searchWord
+        
+//       } else {
+//         document.querySelector('#error').innerHTML = 'An error occured please try again'
+//       }
+//     }).catch((err) => console.log(err))
+// }
