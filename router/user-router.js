@@ -33,7 +33,7 @@ router.get('/shop', userControls.getShop)
 router.get('/search', userControls.Search)
 router.get('/products/filter', userControls.filterProducts)
 router.get('/shop/next', userControls.changePage)
-router.get('*',userControls.get404)
+
 
 router.post('/register', session.notLogged, userControls.saveUser)
 router.post('/otp', session.notLogged, userControls.addUser)
@@ -62,5 +62,10 @@ router.patch('/wishlist/add', session.isLogged, cartControls.addtoWishlist)
 router.patch('/wish/remove', session.isLogged, cartControls.removeWishItem)
 router.patch('/wishlist/cart/add', session.isLogged, cartControls.addtoCartfromWish)
 router.patch('/delete/address', session.isLogged, userControls.deleteAddress)
+
+
+router.all('*', (req, res) => {
+  res.render('404',{user: req.session?.user?.name})
+})
 
 module.exports = router

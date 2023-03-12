@@ -1,4 +1,4 @@
-/* eslint-disable eqeqeq */
+
 const User = require('../models/user')
 
 module.exports = {
@@ -8,7 +8,6 @@ module.exports = {
       const user = await User.find({ _id: req.session.user._id })
       console.log(user)
       if (user[0].isBlocked == true) {
-        console.log('he')
         req.session.user = null
         res.redirect('/login')
       } else {

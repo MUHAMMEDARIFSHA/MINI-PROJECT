@@ -21,6 +21,8 @@ collectionName : 'storeSession'
 
 })
 
+
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "./public")));
@@ -39,7 +41,7 @@ app.use(session({
 
 
 
-
-app.use('/', userrouter)
 app.use('/admin', adminrouter)
+app.use('/', userrouter)
+
 app.listen(4000, () => { console.log("server running at port 4000") })

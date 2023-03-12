@@ -407,6 +407,7 @@ module.exports = {
 
     await browser.close()
     res.download('sales-details.pdf', 'Sale Report.pdf')
-  }
+  },
+  
 
 }

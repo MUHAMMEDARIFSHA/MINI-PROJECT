@@ -16,6 +16,7 @@ router.get('/users', session.isLogged, adminControls.getUsers)
 
 router.put('/userdata/:id', adminControls.blockUser)
 
+
 router.patch('/categories/:id', session.isLogged, adminControls.deleteCategory)
 router.patch('/coupons/:id', session.isLogged, adminControls.deleteCoupon)
 

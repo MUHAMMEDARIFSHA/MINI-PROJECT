@@ -517,6 +517,7 @@ module.exports = {
       let user
       let category = await Categories.find({ isDeleted: false })
       let categoryForfilter = []
+      let pages
 
       const perPage = 4
       const page = req.session.page || 1
@@ -536,16 +537,17 @@ module.exports = {
         ])
   
 
-      const pages = Math.ceil((totalCount[0].productname) / perPage)
+      pages = Math.ceil((totalCount[0].productname) / perPage)
 
       const from = req.session.from || 0
       const to = req.session.to || 100000
   
-      if (req.session.searchWord.length > 0) {
+      if (req.session.searchWord) {
         user = await User.find({ isBlocked: false })
         category = await Categories.find({ isDeleted: false })
         searchWord = req.session.searchWord
         req.session.searchWordforFilter = req.session.searchWord
+        pages = 0
         req.session.searchWord = ''
         products = await Products.aggregate([
           {
@@ -576,13 +578,15 @@ module.exports = {
           },
           
 
-        ]).skip((page - 1) * perPage).limit(perPage)
+        ])
+        // .skip((page - 1) * perPage).limit(perPage)
       } else if (req.session.productCategory) {
          searchWord = req.session.searchWordinFilter
         req.session.productCategory.forEach(item => {
           categoryForfilter.push(mongoose.Types.ObjectId(item))
     
         })
+        pages = 0
         req.session.productCategory = null
         products = await Products.aggregate([
           {
@@ -605,12 +609,14 @@ module.exports = {
             }
           }
 
-        ]).skip((page-1) * perPage).limit(perPage)
+         ])
+        // .skip((page-1) * perPage).limit(perPage)
         
       } else if (req.session.from || req.session.to) {
          searchWord = req.session.searchWordinFilter
         req.session.from = null
         req.session.to = null
+        pages= 0
         req.session.productCategory = null
         products = await Products.aggregate([
           {
@@ -638,7 +644,8 @@ module.exports = {
               categoryId: 1
             }
           }
-        ]).skip((page - 1) * perPage).limit(perPage)
+        ])
+        // .skip((page - 1) * perPage).limit(perPage)
       } else {
         console.log('normalshop')
         req.session.searchWordinFilter = ''
